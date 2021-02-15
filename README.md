@@ -10,25 +10,26 @@
 You can install the released version of dnaRt from [Github](https://github.com/js2264/dnaRt) with:
 
 ``` r
-remote::install_github("js2264/dnaRt")
+remotes::install_github("js2264/dnaRt")
 ```
 
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
-``` r
-library(tidyverse)
+```r
 library(dnaRt)
-yob <- "1991"
-dob <- "0826"
-name <- 'maud'
-project <- initiateProject(yob, dob, name) %>% 
-    getSequences(top = 40) %>% 
-    getPairwiseAlnScores(cores = 14) %>% 
-    getGraph() %>% 
-    getLayout() %>% 
-    getPlottingData()
-plotArt(project, age = 20)
+dnart_project <- dnart(
+	dob = "20/06/1992", 
+	given = "jacques", 
+    top = 100, 
+	folder = 'data', 
+	step = 5, 
+	width = 100, 
+	force = TRUE, 
+	cores = 15
+)
+plotArt(dnart_project, age = 3)
+plotArt(project, date = "29/09/2020")
 ```
 

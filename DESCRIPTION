@@ -1,14 +1,13 @@
 Package: dnaRt
-Title: What the Package Does (One Line, Title Case)
+Title: dn&art
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Jacques",
+           family = "Serizay",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: MIT + file LICENSE
+           email = "jacquesserizay@gmail.com")
+Description: DNA Networks & Articifial Representation of Time
+License: CC BY-NC-SA 4.0
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
