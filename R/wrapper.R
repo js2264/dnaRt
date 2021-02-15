@@ -9,7 +9,9 @@ dnart <- function(
     folder = 'data', 
     step = 5, 
     width = 100, 
-    force = FALSE
+    force = FALSE, 
+    genome_seq = NULL, 
+    cores = 1
 ) {
     `%>%` <- tidyr::`%>%`
     project <- initiateProject(
@@ -18,7 +20,9 @@ dnart <- function(
         top = top,
         folder = folder,
         step = step,
-        width = width
+        width = width, 
+        genome_seq = genome_seq,
+        cores = cores
     ) %>% 
         getSequences(force = force) %>%
         getPairwiseAlnScores(force = force) %>% 

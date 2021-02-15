@@ -11,7 +11,9 @@ dnart(
   folder = "data",
   step = 5,
   width = 100,
-  force = FALSE
+  force = FALSE,
+  genome_seq = NULL,
+  cores = 1
 )
 }
 \description{
