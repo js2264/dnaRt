@@ -1,3 +1,7 @@
+#' msg_success
+#'
+#' @export
+
 msg_success <- function(...) {
     x <- crayon::green(clisymbols::symbol$tick)
     timeof <- format(Sys.time(), format = "%R")
@@ -9,6 +13,10 @@ msg_success <- function(...) {
     ))
 }
 
+#' msg_warning
+#'
+#' @export
+
 msg_warning <- function(...) {
     x <- crayon::red(clisymbols::symbol$cross)
     timeof <- format(Sys.time(), format = "%R")
@@ -19,6 +27,10 @@ msg_warning <- function(...) {
         paste(..., collapse = " ")
     ))
 }
+
+#' msg_note
+#'
+#' @export
 
 msg_note <- function(...) {
     x <- crayon::blue(clisymbols::symbol$circle_filled)

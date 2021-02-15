@@ -1,3 +1,7 @@
+#' dnart
+#'
+#' @export
+
 dnart <- function(
     dob = "20/06/1992", 
     given = "jacques", 
