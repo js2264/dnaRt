@@ -26,7 +26,7 @@ getRingRadius <- function(project, force = FALSE) {
     y <- log(1:100)
     x <- seq(20, 100, length.out = length(y))
     m <- lm(y ~ log(x))
-    plot(x, predict(m),type='l',col='blue')
+    # plot(x, predict(m),type='l',col='blue')
     # ------- Cut radius values by a slowly decreasing log vec. 
     dists <- abs(dists - quantile(dists, 0.60)) # Rescale dists so that 0 is ~ 0.75 from the center 
     y_scaled <- predict(m, x = seq(min(dists), max(dists), length.out = top)) # Redistribution of values

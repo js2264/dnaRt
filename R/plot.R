@@ -5,13 +5,14 @@
 #' @param date 
 #' @param age 
 #' @param palette 
+#' @param pdf 
+#' @param theme.args 
 #'
-#' @import ggplot2
 #' @return project (invisible)
 #'
 #' @export
 
-plotArt <- function(project, date = NULL, age = NULL, palette = scico::scale_fill_scico(palette = 'batlow')) {
+plotArt <- function(project, date = NULL, age = NULL, palette = scico::scale_fill_scico(palette = 'batlow'), pdf = NULL, theme.args = NULL) {
     `%>%` <- tidyr::`%>%`
     library(ggplot2)
     yob <- project[["yob"]]
@@ -48,7 +49,7 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scico::scale_fil
     if ('dist_cut' %in% colnames(df)) {
         df <- df %>% dplyr::filter(as.numeric(dist_cut) <= limit) 
     }
-    K <- round(nrow(df) / {3 - (2*limit/top)})
+    K <- round(nrow(df) / {2 - (limit/top)})
     K_rest <- nrow(df) - K
     df <- df %>%
         dplyr::mutate(
@@ -71,10 +72,16 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scico::scale_fil
         coord_fixed() + 
         theme(legend.position = 'none') + 
         lims(x = c(min(plotdf$x), max(plotdf$x)), y = c(min(plotdf$y), max(plotdf$y)))
+    if (!is.null(theme.args)) p <- p + theme.args
     # ---------- Save plot
     if (!dir.exists(glue::glue("{project_path}/plots"))) 
         dir.create(glue::glue("{project_path}/plots"))
-    plot_path <- glue::glue("{project_path}/plots/plot-{date}.pdf")
+    if (is.null(pdf)) {
+        plot_path <- glue::glue("{project_path}/plots/plot-{date}.pdf")
+    }
+    else {
+        plot_path <- pdf
+    }
     ggsave(plot = p, plot_path, width = 30, height = 30)
     msg_success(glue::glue("Plot saved in {plot_path}"))
     # Return project

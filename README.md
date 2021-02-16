@@ -33,16 +33,69 @@ dnart_project <- dnart(
 # ------- Make graphics
 dnart_project %>% 
 	getRingRadius() %>% 
-	plotArt(age = 2, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 5, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 10, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 20, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 30, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 40, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 50, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 60, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 70, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 80, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 90, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
-	plotArt(age = 99, palette = scico::scale_fill_scico(palette = 'roma'))
+	plotArt(age = 2, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 5, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 10, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 20, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 30, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 40, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 50, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 60, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 70, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 80, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 90, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 99, palette = scico::scale_fill_scico(palette = 'davos'))
+```
+
+## Using custome palettes
+
+```r
+# ---- Palette from scico package
+palettes <- scico::scico_palette_names()
+for (col in palettes) {
+getRingRadius(dnart_project) %>% 
+	plotArt(age = 50, palette = scico::scale_fill_scico(palette = col), pdf = glue::glue('plot_palette.', col, '.pdf'))
+}
+
+# ---- Palette from Rcolorbrewer
+pal = "RdYlBu"
+plotArt(
+	getRingRadius(dnart_project), 
+	age = 50, 
+	palette = scale_fill_distiller(palette = pal), 
+	pdf = glue::glue('plot_palette.', pal, '.pdf')
+)
+
+# ---- Palette generated from 6 main colors in an image
+cols <- getPaletteFromImg("data/PK03T1.jpg", ncols = 4)
+colplot <- checkPalette(cols)
+plotArt(
+	getRingRadius(dnart_project), 
+	age = 90, 
+	palette = scale_fill_gradientn(colors = cols), 
+	pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
+)
+
+# ---- Custom palette from discrete colors
+cols <- c('#ebebeb', '#e3e3e3', '#c9c9c9', '#636363', '#575757', '#4a4949')
+plotArt(
+	getRingRadius(dnart_project), 
+	age = 90, 
+	palette = scale_fill_gradientn(colors = cols), 
+	pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
+)
+```
+
+## Further customizing
+
+```r
+# ---- Adding background
+cols <- c('#ebebeb', '#e3e3e3', '#c9c9c9', '#636363', '#575757', '#4a4949')
+plotArt(
+	getRingRadius(dnart_project), 
+	age = 90, 
+	palette = scale_fill_gradientn(colors = cols), 
+	theme.args = theme(plot.background = element_rect(fill = "#000000")),
+	pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
+)
 ```

@@ -233,7 +233,7 @@ getLayout <- function(project, force = FALSE) {
     return(project)
 }
 
-#' getPlottingData
+#' getNoise
 #'
 #' @param project 
 #' @param force 
@@ -242,7 +242,7 @@ getLayout <- function(project, force = FALSE) {
 #'
 #' @export
 
-getPlottingData <- function(project, force = FALSE) {
+getNoise <- function(project, force = FALSE) {
     `%>%` <- tidyr::`%>%`
     yob <- project[["yob"]]
     dob <- project[["dob"]]
@@ -262,8 +262,8 @@ getPlottingData <- function(project, force = FALSE) {
             dplyr::mutate(
                 x_ = (x - min(x))/(max(x) - min(x)), 
                 y_ = (y - min(y))/(max(y) - min(y)), 
-                pertube = ambient::gen_simplex(x, y, frequency = 5) / 10,
-                noise = ambient::gen_worley(x, y, value = 'distance', frequency = 5) / 10, 
+                pertube = ambient::gen_simplex(x, y, frequency = 5) / 25,
+                noise = ambient::gen_worley(x, y, value = 'distance', frequency = 5) / 25, 
                 x = x_ - noise, 
                 y = y_ - noise
             )

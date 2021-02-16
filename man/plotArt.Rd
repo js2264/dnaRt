@@ -8,7 +8,9 @@ plotArt(
   project,
   date = NULL,
   age = NULL,
-  palette = scico::scale_fill_scico(palette = "batlow")
+  palette = scico::scale_fill_scico(palette = "batlow"),
+  pdf = NULL,
+  theme.args = NULL
 )
 }
 \arguments{
@@ -19,6 +21,10 @@ plotArt(
 \item{age}{}
 
 \item{palette}{}
+
+\item{pdf}{}
+
+\item{theme.args}{}
 }
 \value{
 project (invisible)
