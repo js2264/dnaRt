@@ -12,7 +12,7 @@
 #'
 #' @export
 
-plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_distiller(palette = "Spectral"), pdf = NULL, theme.args = NULL) {
+plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_gradientn(colors = c("#89B9BD", "#323348", "#A25543", "#FFD3B8", "#149698", "#8A151B","#F04635")), pdf = NULL, theme.args = NULL) {
     `%>%` <- tidyr::`%>%`
     library(ggplot2)
     yob <- project[["yob"]]
@@ -21,7 +21,16 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_disti
     folder <- project[["folder"]]
     project_path <- project[["project_path"]]
     top <- project[["top"]]
-    plotdf <- project[["data"]]
+    if ("data_final" %in% names(project)) {
+        plotdf <- project[["data_final"]]
+        type <- attributes(project[["data_final"]])$type
+    }
+    else {
+        plotdf <- project[["data"]]
+        plotdf$x_final <- plotdf$x
+        plotdf$y_final <- plotdf$y
+        type <- 'raw'
+    }
     #
     set.seed(glue::glue(digest::digest2int("{yob}{dob}")))
     if (is.null(age) & !is.null(date)) {
@@ -42,13 +51,10 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_disti
         stop()
     }
     ncols <- 1000
-    #
-    # ------- Add noise (and filter nodes <= year)
-    set.seed(digest::digest2int(given))
+    # ------- Filter nodes <= year
     df <- plotdf %>% dplyr::filter(year <= limit) 
-    if ('dist_cut' %in% colnames(df)) {
-        df <- df %>% dplyr::filter(as.numeric(dist_cut) <= limit) 
-    }
+    # ------- Add aesthetics
+    set.seed(digest::digest2int(given))
     K <- round(nrow(df) / {2 - (limit/top)})
     K_rest <- nrow(df) - K
     df <- df %>%
@@ -61,23 +67,26 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_disti
     blacks <- scale_fill_gradient(low = 'white', high = '#000000')
     p <- ggplot(df) + 
         ggforce::geom_voronoi_tile(
-            aes(x = x, y = y, fill = fill), alpha = 0.6,
+            aes(x = x_final, y = y_final, fill = fill), alpha = 0.6,
             expand = unit(-.5, 'mm'), radius = unit(0.25, 'mm'), max.radius = 0.01
         ) + blacks + ggnewscale::new_scale_fill() +
         ggforce::geom_voronoi_tile(
-            aes(x = x, y = y, fill = standout, alpha = standout_alpha), 
+            aes(x = x_final, y = y_final, fill = standout, alpha = standout_alpha), 
             expand = unit(-.25, 'mm'), radius = unit(0.25, 'mm'), max.radius = 0.0125
         ) + palette + 
         theme_void() + 
         coord_fixed() + 
         theme(legend.position = 'none') + 
-        lims(x = c(min(plotdf$x), max(plotdf$x)), y = c(min(plotdf$y), max(plotdf$y)))
+        lims(
+            x = c(min(plotdf$x_final)-0.05, max(plotdf$x_final)+0.05), 
+            y = c(min(plotdf$y_final)-0.05, max(plotdf$y_final)+0.05)
+        )
     if (!is.null(theme.args)) p <- p + theme.args
     # ---------- Save plot
     if (!dir.exists(glue::glue("{project_path}/plots"))) 
         dir.create(glue::glue("{project_path}/plots"))
     if (is.null(pdf)) {
-        plot_path <- glue::glue("{project_path}/plots/plot-{date}.pdf")
+        plot_path <- glue::glue("{project_path}/plots/plot_{type}_{date}.pdf")
     }
     else {
         plot_path <- pdf

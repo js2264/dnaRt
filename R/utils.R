@@ -48,7 +48,7 @@ msg_note <- function(...) {
 #' @export
 
 checkPalette <- function(cols) {
-    p <- data.frame(x = 1, y = 1, z = 1:length(cols), col = cols) %>% 
+    p <- data.frame(x = 1, y = 1, z = 1:length(cols), col = factor(cols, levels = cols)) %>% 
         ggplot(aes(x = x, y = y, fill = z)) + 
         geom_tile() + 
         scale_fill_gradientn(colors = cols) + 

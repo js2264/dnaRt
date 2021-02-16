@@ -13,7 +13,7 @@ You can install the released version of dnaRt from [Github](https://github.com/j
 remotes::install_github("js2264/dnaRt")
 ```
 
-## Example
+## Quick use
 
 This is a basic example which shows you how to generate dn&art graphics. 
 I used my "variables" to define the project:
@@ -42,18 +42,27 @@ dnart_project %>%
 
 ```r
 dnart_project %>%
+	addLineShape() %>% 
+		plotArt(age = 30) %>% 
+		plotArt(age = 40) %>% 
+		plotArt(age = 50) %>% 
+		plotArt(age = 60) %>% 
+		plotArt(age = 70) %>% 
+	addLoessShape() %>% 
+		plotArt(age = 30) %>% 
+		plotArt(age = 40) %>% 
+		plotArt(age = 50) %>% 
+		plotArt(age = 60) %>% 
+		plotArt(age = 70) %>% 
 	addRingShape() %>% 
-	plotArt(age = 10)
-dnart_project %>%
-	addCurveShape() %>% 
-	plotArt(age = 2) %>% 
-	plotArt(age = 10) %>% 
-	plotArt(age = 20) %>% 
-	plotArt(age = 30) %>% 
-	plotArt(age = 40) 
+		plotArt(age = 30) %>% 
+		plotArt(age = 40) %>% 
+		plotArt(age = 50) %>% 
+		plotArt(age = 60) %>% 
+		plotArt(age = 70) 
 ```
 
-## Using custome palettes
+## Using custom palettes
 
 ```r
 # ---- Palette from scico package
@@ -71,12 +80,12 @@ plotArt(
 )
 
 # ---- Palette generated from 6 main colors in an image
-cols <- getPaletteFromImg("data/PK03T1.jpg", ncols = 4)
+cols <- getPaletteFromImg("data/PK03T1.jpg", ncols = 20)
 colplot <- checkPalette(cols)
 plotArt(
 	getRingRadius(dnart_project), 
 	age = 90, 
-	palette = scale_fill_gradientn(colors = cols), 
+	palette = scale_fill_gradientn(colors = cols[c(1:4, 11, 17, )]), 
 	pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
 )
 
