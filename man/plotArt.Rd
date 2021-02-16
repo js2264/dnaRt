@@ -8,7 +8,7 @@ plotArt(
   project,
   date = NULL,
   age = NULL,
-  palette = scico::scale_fill_scico(palette = "batlow"),
+  palette = scale_fill_distiller(palette = "Spectral"),
   pdf = NULL,
   theme.args = NULL
 )

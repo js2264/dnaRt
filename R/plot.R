@@ -12,7 +12,7 @@
 #'
 #' @export
 
-plotArt <- function(project, date = NULL, age = NULL, palette = scico::scale_fill_scico(palette = 'batlow'), pdf = NULL, theme.args = NULL) {
+plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_distiller(palette = "Spectral"), pdf = NULL, theme.args = NULL) {
     `%>%` <- tidyr::`%>%`
     library(ggplot2)
     yob <- project[["yob"]]
@@ -21,7 +21,7 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scico::scale_fil
     folder <- project[["folder"]]
     project_path <- project[["project_path"]]
     top <- project[["top"]]
-    plotdf <- readRDS(project[["plotdf_path"]])
+    plotdf <- project[["data"]]
     #
     set.seed(glue::glue(digest::digest2int("{yob}{dob}")))
     if (is.null(age) & !is.null(date)) {

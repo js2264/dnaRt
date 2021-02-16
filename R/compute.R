@@ -275,5 +275,7 @@ getNoise <- function(project, force = FALSE) {
         msg_success(glue::glue("Plotting data found in {plotdf_path}"))
     }
     project[["plotdf_path"]] <- plotdf_path
+    plotdf <- readRDS(plotdf_path)
+    project[["data"]] <- plotdf
     return(project)
 }

@@ -31,31 +31,35 @@ dnart_project <- dnart(
 	cores = 15
 )
 # ------- Make graphics
-dnart_project %>% 
-	getRingRadius() %>% 
-	plotArt(age = 2, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 5, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 10, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 20, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 30, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 40, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 50, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 60, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 70, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 80, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 90, palette = scico::scale_fill_scico(palette = 'davos')) %>% 
-	plotArt(age = 99, palette = scico::scale_fill_scico(palette = 'davos'))
+dnart_project %>%
+	plotArt(age = 2) 
+dnart_project %>%
+	plotArt(age = 10) %>% 
+	plotArt(age = 20)
+```
+
+## Plot in shapes 
+
+```r
+dnart_project %>%
+	addRingShape() %>% 
+	plotArt(age = 10)
+dnart_project %>%
+	addCurveShape() %>% 
+	plotArt(age = 2) %>% 
+	plotArt(age = 10) %>% 
+	plotArt(age = 20) %>% 
+	plotArt(age = 30) %>% 
+	plotArt(age = 40) 
 ```
 
 ## Using custome palettes
 
 ```r
 # ---- Palette from scico package
-palettes <- scico::scico_palette_names()
-for (col in palettes) {
-getRingRadius(dnart_project) %>% 
-	plotArt(age = 50, palette = scico::scale_fill_scico(palette = col), pdf = glue::glue('plot_palette.', col, '.pdf'))
-}
+dnart_project %>%
+	addRingShape() %>% 
+	plotArt(age = 50, palette = scico::scale_fill_scico(palette = 'davos'))
 
 # ---- Palette from Rcolorbrewer
 pal = "RdYlBu"
