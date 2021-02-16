@@ -15,10 +15,12 @@ remotes::install_github("js2264/dnaRt")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to generate dn&art graphics. 
+I used my "variables" to define the project:
 
 ```r
 library(dnaRt)
+# ------- Initiate project
 dnart_project <- dnart(
 	dob = "20/06/1992", 
 	given = "jacques", 
@@ -26,10 +28,21 @@ dnart_project <- dnart(
 	folder = 'data', 
 	step = 5, 
 	width = 100, 
-	force = TRUE, 
 	cores = 15
 )
-plotArt(dnart_project, age = 3)
-plotArt(project, date = "29/09/2020")
+# ------- Make graphics
+dnart_project %>% 
+	getRingRadius() %>% 
+	plotArt(age = 2, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 5, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 10, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 20, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 30, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 40, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 50, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 60, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 70, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 80, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 90, palette = scico::scale_fill_scico(palette = 'roma')) %>% 
+	plotArt(age = 99, palette = scico::scale_fill_scico(palette = 'roma'))
 ```
-
