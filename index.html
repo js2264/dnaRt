@@ -95,36 +95,40 @@
     cores <span class="op">=</span> <span class="fl">15</span>
 <span class="op">)</span>
 <span class="co"># ------- Make graphics</span>
-<span class="va">dnart_project</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/getRingRadius.html">getRingRadius</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">2</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">5</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">10</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">20</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">30</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">40</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">50</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">60</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">70</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">80</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">90</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">99</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">dnart_project</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> 
+<span class="va">dnart_project</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="plot-in-shapes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#plot-in-shapes" class="anchor"></a>Plot in shapes</h2>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dnart_project</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/addRingShape.html">addRingShape</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+<span class="va">dnart_project</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/addCurveShape.html">addCurveShape</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">40</span><span class="op">)</span> </code></pre></div>
 </div>
 <div id="using-custome-palettes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-custome-palettes" class="anchor"></a>Using custome palettes</h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># ---- Palette from scico package</span>
-<span class="va">palettes</span> <span class="op">&lt;-</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scico_palette_names</span><span class="op">(</span><span class="op">)</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">col</span> <span class="kw">in</span> <span class="va">palettes</span><span class="op">)</span> <span class="op">{</span>
-<span class="fu"><a href="reference/getRingRadius.html">getRingRadius</a></span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">50</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="va">col</span><span class="op">)</span>, pdf <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">'plot_palette.'</span>, <span class="va">col</span>, <span class="st">'.pdf'</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
+<span class="va">dnart_project</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/addRingShape.html">addRingShape</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">50</span>, palette <span class="op">=</span> <span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># ---- Palette from Rcolorbrewer</span>
 <span class="va">pal</span> <span class="op">=</span> <span class="st">"RdYlBu"</span>
 <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>
-    <span class="fu"><a href="reference/getRingRadius.html">getRingRadius</a></span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span>, 
+    <span class="fu">getRingRadius</span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span>, 
     age <span class="op">=</span> <span class="fl">50</span>, 
     palette <span class="op">=</span> <span class="fu">scale_fill_distiller</span><span class="op">(</span>palette <span class="op">=</span> <span class="va">pal</span><span class="op">)</span>, 
     pdf <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">'plot_palette.'</span>, <span class="va">pal</span>, <span class="st">'.pdf'</span><span class="op">)</span>
@@ -134,7 +138,7 @@
 <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getPaletteFromImg.html">getPaletteFromImg</a></span><span class="op">(</span><span class="st">"data/PK03T1.jpg"</span>, ncols <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="va">colplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/checkPalette.html">checkPalette</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span>
 <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>
-    <span class="fu"><a href="reference/getRingRadius.html">getRingRadius</a></span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span>, 
+    <span class="fu">getRingRadius</span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span>, 
     age <span class="op">=</span> <span class="fl">90</span>, 
     palette <span class="op">=</span> <span class="fu">scale_fill_gradientn</span><span class="op">(</span>colors <span class="op">=</span> <span class="va">cols</span><span class="op">)</span>, 
     pdf <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">'plot_palette.'</span>, <span class="st">'gradient'</span>, <span class="st">'.pdf'</span><span class="op">)</span>
@@ -143,7 +147,7 @@
 <span class="co"># ---- Custom palette from discrete colors</span>
 <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'#ebebeb'</span>, <span class="st">'#e3e3e3'</span>, <span class="st">'#c9c9c9'</span>, <span class="st">'#636363'</span>, <span class="st">'#575757'</span>, <span class="st">'#4a4949'</span><span class="op">)</span>
 <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>
-    <span class="fu"><a href="reference/getRingRadius.html">getRingRadius</a></span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span>, 
+    <span class="fu">getRingRadius</span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span>, 
     age <span class="op">=</span> <span class="fl">90</span>, 
     palette <span class="op">=</span> <span class="fu">scale_fill_gradientn</span><span class="op">(</span>colors <span class="op">=</span> <span class="va">cols</span><span class="op">)</span>, 
     pdf <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">'plot_palette.'</span>, <span class="st">'gradient'</span>, <span class="st">'.pdf'</span><span class="op">)</span>
@@ -152,11 +156,11 @@
 <div id="further-customizing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#further-customizing" class="anchor"></a>Further customizing</h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># ---- Adding background</span>
 <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'#ebebeb'</span>, <span class="st">'#e3e3e3'</span>, <span class="st">'#c9c9c9'</span>, <span class="st">'#636363'</span>, <span class="st">'#575757'</span>, <span class="st">'#4a4949'</span><span class="op">)</span>
 <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>
-    <span class="fu"><a href="reference/getRingRadius.html">getRingRadius</a></span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span>, 
+    <span class="fu">getRingRadius</span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span>, 
     age <span class="op">=</span> <span class="fl">90</span>, 
     palette <span class="op">=</span> <span class="fu">scale_fill_gradientn</span><span class="op">(</span>colors <span class="op">=</span> <span class="va">cols</span><span class="op">)</span>, 
     theme.args <span class="op">=</span> <span class="fu">theme</span><span class="op">(</span>plot.background <span class="op">=</span> <span class="fu">element_rect</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#000000"</span><span class="op">)</span><span class="op">)</span>,
