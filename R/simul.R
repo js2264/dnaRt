@@ -60,19 +60,25 @@ randomProject <- function(
 	)
 	#
 	msg_note(glue::glue("Computing layout of simulated graph..."))
+	set.seed(glue::glue(digest::digest2int("{project$yob}{project$dob}")))
 	lay <- ggraph::create_layout(graph, 'auto', weights = NA)
 	# lay <- ggraph::create_layout(graph, 'stress')
 	# plot(lay$x, lay$y)
+	msg_note(glue::glue("Adding plotting features..."))
+	set.seed(glue::glue(digest::digest2int("{project$yob}{project$dob}")))
 	plotdf <- lay %>% 
 		dplyr::select(idx, x, y, year) %>%
 		dplyr::mutate(
 			x_ = (x - min(x))/(max(x) - min(x)), 
 			y_ = (y - min(y))/(max(y) - min(y)), 
-			pertube = ambient::gen_simplex(x, y, frequency = 5) / 25,
-			noise = ambient::gen_worley(x, y, value = 'distance', frequency = 5) / 25, 
+			pertube = ambient::gen_simplex(x, y, frequency = 5) / 5,
+			noise = ambient::gen_worley(x, y, value = 'distance', frequency = 5) / 5, 
 			x = x_ - noise, 
 			y = y_ - noise
 		)
+	#
+	an <- sample(seq(0, 2*pi, length.out = 100), 1)
+    plotdf[, c('x', 'y')] <- rotateXY(plotdf[, c('x', 'y')], angle = an)
 	#
 	msg_success(glue::glue("Successfully simulated graph for {given}, {dob}!"))
     msg_note(glue::glue("Folder: {folder}"))
