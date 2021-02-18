@@ -14,11 +14,10 @@
 #' @export
 
 initiateProject <- function(dob, given, folder = 'data', top = 100, step = 10, width = 100, genome_seq = NULL, cores = 5) {
-    dat <- as.Date(dob, "%d/%m/%Y")
-    y <- as.numeric(substr(dat, 1, 4))
-    d <- substr(dat, 6, 10)
-    path <- glue::glue("{folder}/{y}-{d}_{given}")
     dob <- as.Date(dob, "%d/%m/%Y")
+    y <- as.numeric(substr(dob, 1, 4))
+    d <- substr(dob, 6, 10)
+    path <- glue::glue("{folder}/{y}-{d}_{given}")
     if (!dir.exists('data')) { dir.create('data') }
     if (!dir.exists(path)) { dir.create(path) }
     l <- list(
@@ -165,7 +164,7 @@ getGraph <- function(project, force = FALSE) {
     #
     if (!file.exists(graph_path) | force) {
         mat <- readRDS(project[["mat_path"]])
-        # ------- Get noes / edges from mat
+        # ------- Get nodes / edges from mat
         `%>%` <- tidyr::`%>%`
         msg_note(glue::glue("Computing nodes..."))
         nodes <- data.frame(
@@ -233,7 +232,7 @@ getLayout <- function(project, force = FALSE) {
     return(project)
 }
 
-#' getNoise
+#' getPlottingData
 #'
 #' @param project 
 #' @param force 
@@ -242,7 +241,7 @@ getLayout <- function(project, force = FALSE) {
 #'
 #' @export
 
-getNoise <- function(project, force = FALSE) {
+getPlottingData <- function(project, force = FALSE) {
     `%>%` <- tidyr::`%>%`
     yob <- project[["yob"]]
     dob <- project[["dob"]]

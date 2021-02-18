@@ -28,6 +28,6 @@ dnart <- function(
         getPairwiseAlnScores(force = force) %>% 
         getGraph(force = force) %>% 
         getLayout(force = force) %>% 
-        getNoise(force = force) 
+        getPlottingData(force = force) 
     return(project)
 }
