@@ -22,13 +22,10 @@ I used my "variables" to define the project:
 library(dnaRt)
 # ------- Initiate project
 dnart_project <- dnart(
-	dob = "20/06/1992", 
+	folder = 'data',
 	given = "jacques", 
-    top = 100, 
-	folder = 'data', 
-	step = 5, 
-	width = 100, 
-	cores = 5
+	dob = "20/06/1992", 
+    top = 100
 )
 # ------- Make default, full art
 plotArt(dnart_project)
@@ -81,17 +78,25 @@ dnart_project %>%
 	plotArt(age = 80)
 ```
 
-## Random plots 
+## Simulated plots 
 
 ```r
-list_projects <- parallel::mclapply(mc.cores = 4, 1:50, function(seed) randomProject(seed = seed))
-# Plot several ages
-plotAges(list_projects[[1]], seq(1, 30, by = 3))
+# ------ Simulate a single project
+proj <- randomProject()
+plotArt(proj)
+# ------ Simulate several projects
+list_projects <- parallel::mclapply(mc.cores = 5, 1:5, function(seed) randomProject(seed = seed, nedges = 'max'))
+# ------ Plot several ages for a single plot
+plotAges(list_projects[[1]], seq(1, 20, by = 3))
+# ------ Plot a single year for multiple plots
+list_projects <- lapply(list_projects, plotArt, path = 'results')
 ```
 
 ## Using custom palettes
 
 ```r
+data(sample_data, package = 'dnaRt')
+dnart_project <- dnart(given = 'James', dob = '11/11/1990', data = sample_data)
 # ---- Palette from scico package
 dnart_project %>%
 	addRingShape() %>% 
@@ -101,14 +106,12 @@ dnart_project %>%
 	addRingShape() %>% 
 	addPalette(scico::scale_fill_scico(palette = 'vik')) %>% 
 	plotArt(age = 51)
-
 # ---- Palette from Rcolorbrewer
 pal = "RdYlBu"
 dnart_project %>%
 	addRingShape() %>% 
 	addPalette(scale_fill_distiller(palette = pal)) %>% 
-	plotArt(age = 50)
-
+	plotArt(age = 52)
 # ---- Palette generated from main colors from an image
 img <- "https://miro.medium.com/max/2000/1*QhGyZ9TJDFy_pWwnhCcZqA.png"
 cols <- getPaletteFromImg(img, ncols = 20)
@@ -117,28 +120,35 @@ dnart_project %>%
 	addRingShape() %>% 
 	addPalette(scale_fill_gradientn(colors = cols[c(1, 2, 6, 9, 10, 11, 12, 15, 16)])) %>% 
 	plotArt(
-		age = 90, 
+		age = 53, 
 		pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
 	)
-
 # ---- Custom palette from discrete colors
 cols <- c('#ebebeb', '#e3e3e3', '#c9c9c9', '#636363', '#575757', '#4a4949')
 dnart_project %>% 
 	addRingShape() %>% 
 	addPalette(scale_fill_gradientn(colors = cols)) %>% 
 	plotArt(
-		age = 90, 
+		age = 54, 
 		pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
 	)
 ```
 
-## Further customizing
+## Advanced customization
 
 ```r
+dnart_project <- dnart(given = 'James', dob = '11/11/1991', data = sample_data)
+# ---- Zooming to a portion of the plot 
+dnart_project %>%
+	plotArt(pdf = 'zoom-factor1.pdf') %>%
+	plotArt(zoom = 2, pdf = 'zoom-factor2.pdf') %>%
+	plotArt(zoom = 3, pdf = 'zoom-factor3.pdf') %>%
+	plotArt(zoom = 4, pdf = 'zoom-factor4.pdf') 
 # ---- Adding background
+dnart_project <- randomProject(seed = 1)
 cols <- c('#ebebeb', '#e3e3e3', '#c9c9c9', '#636363', '#575757', '#4a4949')
 plotArt(
-	getRingRadius(dnart_project), 
+	getRingRadius(proj), 
 	age = 90, 
 	palette = scale_fill_gradientn(colors = cols), 
 	theme.args = theme(plot.background = element_rect(fill = "#000000")),

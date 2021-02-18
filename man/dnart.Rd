@@ -5,15 +5,16 @@
 \title{dnart}
 \usage{
 dnart(
-  dob = "20/06/1992",
-  given = "jacques",
-  top = 4,
+  dob = "",
+  given = "",
+  top = 100,
   folder = "data",
   step = 5,
   width = 100,
   force = FALSE,
   genome_seq = NULL,
-  cores = 1
+  cores = 1,
+  data = NULL
 )
 }
 \description{

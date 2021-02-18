@@ -4,7 +4,15 @@
 \alias{plotArt}
 \title{plotArt}
 \usage{
-plotArt(project, date = NULL, age = NULL, pdf = NULL, theme.args = NULL)
+plotArt(
+  project,
+  date = NULL,
+  age = NULL,
+  pdf = NULL,
+  path = NULL,
+  theme.args = NULL,
+  zoom = 1
+)
 }
 \arguments{
 \item{project}{}
@@ -15,9 +23,11 @@ plotArt(project, date = NULL, age = NULL, pdf = NULL, theme.args = NULL)
 
 \item{pdf}{}
 
+\item{path}{}
+
 \item{theme.args}{}
 
-\item{palette}{}
+\item{zoom}{}
 }
 \value{
 project (invisible)

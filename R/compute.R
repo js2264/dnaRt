@@ -75,7 +75,7 @@ getSequences <- function(project, force = FALSE) {
         }
         # ------- Define sequences specific to yob-dob
         msg_note(glue::glue("Extracting sequences corresponding to D.O.B: {dob}..."))
-        set.seed(glue::glue(digest::digest2int("{yob}{dob}")))
+        set.seed(digest::digest2int(glue::glue("{yob}{dob}")))
         chr <- sample(names(seq), 1)
         loc <- sample(1:{width(seq[chr]) - 2000000}, 1)
         gr <- GRanges(seqnames = chr, ranges = IRanges(loc))
@@ -182,7 +182,7 @@ getGraph <- function(project, force = FALSE) {
             dplyr::filter(weight > 30)
         # ------- Turn it into a graph
         msg_note(glue::glue("Computing graph..."))
-        set.seed(glue::glue(digest::digest2int("{yob}{dob}")))
+        set.seed(digest::digest2int(glue::glue("{yob}{dob}")))
         graph <- tidygraph::tbl_graph(
             nodes = nodes, 
             edges = edges,

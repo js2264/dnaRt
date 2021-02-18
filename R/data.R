@@ -11,3 +11,10 @@
 #' @description top names from 1990 onward, obtained from `babynames` 
 #' @format character vector
 "names"
+
+#' sample_data
+#' @name sample_data
+#' @title sample_data
+#' @description sample plotting data. Can be imported with dnart(..., data = dnaRt::sample_data)
+#' @format data.frame
+"sample_data"

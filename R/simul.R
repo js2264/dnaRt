@@ -2,7 +2,8 @@ randomProject <- function(
 	folder = 'data', 
 	given = "sample", 
     dob = "01/01/1990", 
-	seed = NULL
+	seed = NULL, 
+	nedges = 'max'
 ) 
 {
 	top = 100
@@ -20,7 +21,8 @@ randomProject <- function(
 	y <- as.numeric(substr(dob, 1, 4))
     d <- substr(dob, 6, 10)
 	path <- glue::glue("{folder}/{y}-{d}_{given}")
-	dir.create(path)
+    if (!dir.exists('data')) { dir.create('data') }
+    if (!dir.exists(path)) { dir.create(path) }
 	#
 	msg_note(glue::glue("Initiating project..."))
 	project <- list(
@@ -42,30 +44,35 @@ randomProject <- function(
 	)
 	#
 	msg_note(glue::glue("Simulating graph..."))
-	set.seed(glue::glue(digest::digest2int("{project$yob}{project$dob}")))
+	set.seed(digest::digest2int(glue::glue("{project$yob}{project$dob}")))
+	edges <- dnaRt::sample_edges
+	if (nedges == 'max') nedges <- nrow(edges)
+	edges <- edges %>% 
+		dplyr::mutate(
+			to = sample(to),
+			from = sample(from)
+		) %>% 
+		dplyr::filter(weight > 35) %>% 
+		dplyr::top_n(nedges, wt = weight)
 	nodes <- data.frame(
 		idx = paste0('idx_', 1:nrows),
 		numidx = 1:nrows, 
 		year = round(seq(0, floor(nrows/365.25*step), length.out = nrows))
-	)
-	x <- data(dnaRt::sample_edges)
-	sample_edges$to <- sample(sample_edges$to)
-	sample_edges$from <- sample(sample_edges$from)
-	sample_edges <- sample_edges %>% 
-		dplyr::filter(weight > 35)
+	) %>% 
+		dplyr::filter(as.numeric(gsub('idx_', '', idx)) %in% c(edges$to, edges$from))
 	graph <- tidygraph::tbl_graph(
 		nodes = nodes, 
-		edges = sample_edges,
+		edges = edges,
 		directed = FALSE
 	)
 	#
 	msg_note(glue::glue("Computing layout of simulated graph..."))
-	set.seed(glue::glue(digest::digest2int("{project$yob}{project$dob}")))
-	lay <- ggraph::create_layout(graph, 'auto', weights = NA)
-	# lay <- ggraph::create_layout(graph, 'stress')
-	# plot(lay$x, lay$y)
+	set.seed(digest::digest2int(glue::glue("{project$yob}{project$dob}")))
+	lay <- graphlayouts::layout_with_sparse_stress(graph, pivots = 100) %>% 
+		data.frame(., nodes$idx, nodes$year) %>% 
+		setNames(c('x', 'y', 'idx', 'year'))
 	msg_note(glue::glue("Adding plotting features..."))
-	set.seed(glue::glue(digest::digest2int("{project$yob}{project$dob}")))
+	set.seed(digest::digest2int(glue::glue("{project$yob}{project$dob}")))
 	plotdf <- lay %>% 
 		dplyr::select(idx, x, y, year) %>%
 		dplyr::mutate(
@@ -85,5 +92,6 @@ randomProject <- function(
     msg_note(glue::glue("D.O.B.: {dob}"))
     msg_note(glue::glue("Given name: {given}"))
 	project[["data"]] <- plotdf
+	saveRDS(plotdf, project$plotdf_path)
 	return(project)
 }

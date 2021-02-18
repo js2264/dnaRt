@@ -1,11 +1,11 @@
-
 #' plotArt
 #'
 #' @param project 
 #' @param date 
 #' @param age 
-#' @param palette 
 #' @param pdf 
+#' @param path 
+#' @param zoom 
 #' @param theme.args 
 #'
 #' @return project (invisible)
@@ -17,7 +17,9 @@ plotArt <- function(
     date = NULL, 
     age = NULL,  
     pdf = NULL, 
-    theme.args = NULL
+    path = NULL,
+    theme.args = NULL,
+    zoom = 1
 ) {
     `%>%` <- tidyr::`%>%`
     library(ggplot2)
@@ -50,7 +52,7 @@ plotArt <- function(
     if (!'step' %in% colnames(plotdf)) 
         plotdf$step <- factor(plotdf$year)
     # ------- Set the limit for filtering (based on a input date, input age, or no filtering)
-    set.seed(glue::glue(digest::digest2int("{yob}{dob}")))
+    set.seed(digest::digest2int(glue::glue("{yob}{dob}")))
     if (is.null(age) & !is.null(date)) {
         age <- as.numeric(as.Date(date, "%d/%m/%Y") - dob)
         limit <- round(age/365.25)
@@ -76,6 +78,9 @@ plotArt <- function(
     }
     # ------- Filter nodes <= year
     df <- plotdf %>% dplyr::filter(as.numeric(step) <= limit) 
+    # ------- Make sure that data ranges are rescaled to 0-1
+    df$x_final <- scales::rescale(df$x_final, c(0, 1))
+    df$y_final <- scales::rescale(df$y_final, c(0, 1))
     # ------- Add fill aesthetics and colored_tiles
     set.seed(digest::digest2int(given))
     K <- round(nrow(df) / {2 - (limit/top)})
@@ -98,22 +103,30 @@ plotArt <- function(
             expand = unit(-.25, 'mm'), radius = unit(0.25, 'mm'), max.radius = 0.0125
         ) + palette + 
         theme_void() + 
-        coord_fixed() + 
+        coord_cartesian(expand = FALSE) + 
         theme(legend.position = 'none') + 
         lims(
-            x = c(min(plotdf$x_final)-0.05, max(plotdf$x_final)+0.05), 
-            y = c(min(plotdf$y_final)-0.05, max(plotdf$y_final)+0.05)
+            x = c(min(df$x_final)-0.05, max(df$x_final)+0.05), 
+            y = c(min(df$y_final)-0.05, max(df$y_final)+0.05)
         )
     if (!is.null(theme.args)) p <- p + theme.args
+    # ------- Zoom plot
+    if (zoom > 1) p <- zoomify(p, zoom)
     # ---------- Save plot
-    if (!dir.exists(glue::glue("{project_path}/plots"))) 
-        dir.create(glue::glue("{project_path}/plots"))
     if (is.null(pdf)) {
-        plot_path <- glue::glue("{project_path}/plots/plot_{given}_{dob}_{type}_{date}.pdf")
+        if (is.null(path)) {
+            plot_path <- glue::glue("{project_path}/plots/plot_{given}_{dob}_{type}_{date}.pdf")
+        }
+        else {
+            plot_path <- glue::glue("{path}/plot_{given}_{dob}_{type}_{date}.pdf")
+        }
     }
     else {
         plot_path <- pdf
     }
+    basedir <- 
+    if (!dir.exists(dirname(plot_path))) 
+        dir.create(dirname(plot_path), showWarnings = FALSE)
     ggsave(plot = p, plot_path, width = 49, height = 49, units = 'in')
     msg_success(glue::glue("Plot saved in {plot_path}"))
     # Return project
@@ -124,14 +137,34 @@ plotArt <- function(
 plotAges <- function(
     project, 
     ages, 
-    theme.args = NULL
+    ...
 ) {
     for (age in ages) {
         plotArt(
             project, 
             date = NULL, 
             age = age,  
-            theme.args = NULL
+            ...
         )
     }
+}
+
+addBackground <- function() {
+
+}
+
+zoomify <- function(p, factor = 2) {
+    pp <- ggplot_build(p)
+    xrange <- pp$layout$panel_params[[1]]$x.range
+    yrange <- pp$layout$panel_params[[1]]$y.range
+    xlims <- c(
+        xrange[1]*(1 - factor/10),
+        xrange[2]*(1 - factor/10)
+    )
+    ylims <- c(
+        yrange[1]*(1 - factor/10),
+        yrange[2]*(1 - factor/10)
+    )
+    p <- p + coord_cartesian(xlim = xlims, ylim = ylims, expand = FALSE)
+    return(p)
 }
