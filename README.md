@@ -28,38 +28,58 @@ dnart_project <- dnart(
 	folder = 'data', 
 	step = 5, 
 	width = 100, 
-	cores = 15
+	cores = 5
 )
-# ------- Make graphics
-dnart_project %>%
-	plotArt(age = 2) 
-dnart_project %>%
-	plotArt(age = 10) %>% 
-	plotArt(age = 20)
+# ------- Make default, full art
+plotArt(dnart_project)
 ```
 
-## Plot in shapes 
+## Plot with shapes
+
+Plots can be piped with `magrittr`:
+
+`filterBy()` is used to specify which value to use to filter out points: 
+- By default, all the points are plotted
+- If a shape is added, `filterBy('dist_shape')` should be used (if a full disc shape is wanted, don't use `filterBy`)
+- If an age or a date is entered in `plotArt`, then points exceeding this date are further removed
 
 ```r
+library(magrittr)
+# ------- Make several graphics with options (shape, filtering, both)
+dnart_project <- randomProject(seed = 2002)
 dnart_project %>%
-	addLineShape() %>% 
-		plotArt(age = 30) %>% 
-		plotArt(age = 40) %>% 
-		plotArt(age = 50) %>% 
-		plotArt(age = 60) %>% 
-		plotArt(age = 70) %>% 
-	addLoessShape() %>% 
-		plotArt(age = 30) %>% 
-		plotArt(age = 40) %>% 
-		plotArt(age = 50) %>% 
-		plotArt(age = 60) %>% 
-		plotArt(age = 70) %>% 
-	addRingShape() %>% 
-		plotArt(age = 30) %>% 
-		plotArt(age = 40) %>% 
-		plotArt(age = 50) %>% 
-		plotArt(age = 60) %>% 
-		plotArt(age = 70) 
+	plotArt(age = 2) %>% 
+	plotArt(age = 10) 
+#
+dnart_project %>%
+	addRingShape() %>%
+	plotArt(age = 2) %>% 
+	plotArt(age = 10) %>% 
+	filterBy('dist_shape') %>% 
+	plotArt(age = 11) %>% 
+	plotArt(age = 40) %>%
+	plotArt(age = 80) 
+#
+dnart_project %>%
+	addEllipticShape() %>%
+	filterBy('dist_shape') %>% 
+	plotArt(age = 2) %>% 
+	plotArt(age = 10) %>% 
+	plotArt(age = 80)
+#
+dnart_project %>%
+	addLoessShape() %>%
+	filterBy('dist_shape') %>% 
+	plotArt(age = 2) %>% 
+	plotArt(age = 10) %>% 
+	plotArt(age = 80)
+#
+dnart_project %>%
+	addLineShape() %>%
+	filterBy('dist_shape') %>% 
+	plotArt(age = 2) %>% 
+	plotArt(age = 10) %>% 
+	plotArt(age = 80)
 ```
 
 ## Using custom palettes
@@ -68,35 +88,41 @@ dnart_project %>%
 # ---- Palette from scico package
 dnart_project %>%
 	addRingShape() %>% 
-	plotArt(age = 50, palette = scico::scale_fill_scico(palette = 'davos'))
+	addPalette(scico::scale_fill_scico(palette = 'davos')) %>% 
+	plotArt(age = 50)
+dnart_project %>%
+	addRingShape() %>% 
+	addPalette(scico::scale_fill_scico(palette = 'vik')) %>% 
+	plotArt(age = 50)
 
 # ---- Palette from Rcolorbrewer
 pal = "RdYlBu"
-plotArt(
-	getRingRadius(dnart_project), 
-	age = 50, 
-	palette = scale_fill_distiller(palette = pal), 
-	pdf = glue::glue('plot_palette.', pal, '.pdf')
-)
+dnart_project %>%
+	addRingShape() %>% 
+	addPalette(scale_fill_distiller(palette = pal)) %>% 
+	plotArt(age = 50)
 
-# ---- Palette generated from 6 main colors in an image
-cols <- getPaletteFromImg("data/PK03T1.jpg", ncols = 20)
+# ---- Palette generated from main colors from an image
+img <- "https://miro.medium.com/max/2000/1*QhGyZ9TJDFy_pWwnhCcZqA.png"
+cols <- getPaletteFromImg(img, ncols = 20)
 colplot <- checkPalette(cols)
-plotArt(
-	getRingRadius(dnart_project), 
-	age = 90, 
-	palette = scale_fill_gradientn(colors = cols[c(1:4, 11, 17, )]), 
-	pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
-)
+dnart_project %>% 
+	addRingShape() %>% 
+	addPalette(scale_fill_gradientn(colors = cols[c(1, 2, 6, 9, 10, 11, 12, 15, 16)])) %>% 
+	plotArt(
+		age = 90, 
+		pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
+	)
 
 # ---- Custom palette from discrete colors
 cols <- c('#ebebeb', '#e3e3e3', '#c9c9c9', '#636363', '#575757', '#4a4949')
-plotArt(
-	getRingRadius(dnart_project), 
-	age = 90, 
-	palette = scale_fill_gradientn(colors = cols), 
-	pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
-)
+dnart_project %>% 
+	addRingShape() %>% 
+	addPalette(scale_fill_gradientn(colors = cols)) %>% 
+	plotArt(
+		age = 90, 
+		pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
+	)
 ```
 
 ## Further customizing

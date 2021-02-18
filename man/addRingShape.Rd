@@ -4,12 +4,10 @@
 \alias{addRingShape}
 \title{addRingShape}
 \usage{
-addRingShape(project, force = FALSE)
+addRingShape(project)
 }
 \arguments{
 \item{project}{}
-
-\item{force}{}
 }
 \value{
 project

@@ -4,15 +4,7 @@
 \alias{plotArt}
 \title{plotArt}
 \usage{
-plotArt(
-  project,
-  date = NULL,
-  age = NULL,
-  palette = scale_fill_gradientn(colors = c("#89B9BD", "#323348", "#A25543", "#FFD3B8",
-    "#149698", "#8A151B", "#F04635")),
-  pdf = NULL,
-  theme.args = NULL
-)
+plotArt(project, date = NULL, age = NULL, pdf = NULL, theme.args = NULL)
 }
 \arguments{
 \item{project}{}
@@ -21,11 +13,11 @@ plotArt(
 
 \item{age}{}
 
-\item{palette}{}
-
 \item{pdf}{}
 
 \item{theme.args}{}
+
+\item{palette}{}
 }
 \value{
 project (invisible)

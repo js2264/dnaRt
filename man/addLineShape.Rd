@@ -2,18 +2,16 @@
 % Please edit documentation in R/shapes.R
 \name{addLineShape}
 \alias{addLineShape}
-\title{addCurveShape}
+\title{addLineShape}
 \usage{
-addLineShape(project, force = FALSE)
+addLineShape(project)
 }
 \arguments{
 \item{project}{}
-
-\item{force}{}
 }
 \value{
 project
 }
 \description{
-addCurveShape
+addLineShape
 }

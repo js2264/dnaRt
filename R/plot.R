@@ -12,7 +12,13 @@
 #'
 #' @export
 
-plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_gradientn(colors = c("#89B9BD", "#323348", "#A25543", "#FFD3B8", "#149698", "#8A151B","#F04635")), pdf = NULL, theme.args = NULL) {
+plotArt <- function(
+    project, 
+    date = NULL, 
+    age = NULL,  
+    pdf = NULL, 
+    theme.args = NULL
+) {
     `%>%` <- tidyr::`%>%`
     library(ggplot2)
     yob <- project[["yob"]]
@@ -21,9 +27,18 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_gradi
     folder <- project[["folder"]]
     project_path <- project[["project_path"]]
     top <- project[["top"]]
-    if ("data_final" %in% names(project)) {
-        plotdf <- project[["data_final"]]
-        type <- attributes(project[["data_final"]])$type
+    # ------- Get palette 
+    if ("palette" %in% names(project)) {
+        palette <- project$palette
+    }
+    else {
+        cols <- c("#89B9BD", "#323348", "#A25543", "#FFD3B8", "#149698", "#8A151B","#F04635")
+        palette <- scale_fill_gradientn(colors = cols)
+    }
+    # ------- Get plot_data from project
+    if ("plot_data" %in% names(project)) {
+        plotdf <- project[["plot_data"]]
+        type <- attributes(project[["plot_data"]])$type
     }
     else {
         plotdf <- project[["data"]]
@@ -31,7 +46,10 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_gradi
         plotdf$y_final <- plotdf$y
         type <- 'raw'
     }
-    #
+    # ------- Get step if missing
+    if (!'step' %in% colnames(plotdf)) 
+        plotdf$step <- factor(plotdf$year)
+    # ------- Set the limit for filtering (based on a input date, input age, or no filtering)
     set.seed(glue::glue(digest::digest2int("{yob}{dob}")))
     if (is.null(age) & !is.null(date)) {
         age <- as.numeric(as.Date(date, "%d/%m/%Y") - dob)
@@ -45,23 +63,28 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_gradi
         limit <- age
         age <- floor(age * 365.25)
         date <- dob + age
-    }
+    } 
+    else if (is.null(age) & is.null(date)) {
+        limit <- top
+        age <- top
+        date <- NA
+    } 
+    # ------- Stop if queried age is higher than max computed age
     if (limit > top) {
         msg_warning("Age is higher than the maximum computed age. Retry with lower age.")
         stop()
     }
-    ncols <- 1000
     # ------- Filter nodes <= year
-    df <- plotdf %>% dplyr::filter(year <= limit) 
-    # ------- Add aesthetics
+    df <- plotdf %>% dplyr::filter(as.numeric(step) <= limit) 
+    # ------- Add fill aesthetics and colored_tiles
     set.seed(digest::digest2int(given))
     K <- round(nrow(df) / {2 - (limit/top)})
     K_rest <- nrow(df) - K
     df <- df %>%
         dplyr::mutate(
             fill = sample(1:age, nrow(.), replace = TRUE)/{3*nrow(.)}, 
-            standout = sample(c(sample(2:ncols, K, replace = TRUE), rep(1, K_rest))),
-            standout_alpha = sapply(standout, function(x) ifelse(x == 1, 0, 0.6))
+            colored_tile = sample(c(sample(2:1000, K, replace = TRUE), rep(1, K_rest))),
+            colored_tile_alpha = sapply(colored_tile, function(x) ifelse(x == 1, 0, 0.6))
         )
     # ------- Plot graph 
     blacks <- scale_fill_gradient(low = 'white', high = '#000000')
@@ -71,7 +94,7 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_gradi
             expand = unit(-.5, 'mm'), radius = unit(0.25, 'mm'), max.radius = 0.01
         ) + blacks + ggnewscale::new_scale_fill() +
         ggforce::geom_voronoi_tile(
-            aes(x = x_final, y = y_final, fill = standout, alpha = standout_alpha), 
+            aes(x = x_final, y = y_final, fill = colored_tile, alpha = colored_tile), 
             expand = unit(-.25, 'mm'), radius = unit(0.25, 'mm'), max.radius = 0.0125
         ) + palette + 
         theme_void() + 
@@ -86,13 +109,14 @@ plotArt <- function(project, date = NULL, age = NULL, palette = scale_fill_gradi
     if (!dir.exists(glue::glue("{project_path}/plots"))) 
         dir.create(glue::glue("{project_path}/plots"))
     if (is.null(pdf)) {
-        plot_path <- glue::glue("{project_path}/plots/plot_{type}_{date}.pdf")
+        plot_path <- glue::glue("{project_path}/plots/plot_{given}_{dob}_{type}_{date}.pdf")
     }
     else {
         plot_path <- pdf
     }
-    ggsave(plot = p, plot_path, width = 30, height = 30)
+    ggsave(plot = p, plot_path, width = 49, height = 49, units = 'in')
     msg_success(glue::glue("Plot saved in {plot_path}"))
     # Return project
+    project$plot <- p
     invisible(project)
 }

@@ -43,6 +43,24 @@ msg_note <- function(...) {
     ))
 }
 
+#' addMeta
+#'
+#' @export
+
+addMeta <- function(project, x, label) {
+    project[[label]] <- x
+    return(project)
+}
+
+#' addPalette
+#'
+#' @export
+
+addPalette <- function(project, x) {
+    project$palette <- x
+    return(project)
+}
+
 #' checkPalette
 #'
 #' @export
@@ -64,7 +82,23 @@ checkPalette <- function(cols) {
 #' @export
 
 getPaletteFromImg <- function(img, ncols = 5) {
-    img <- jpeg::readJPEG(img)
+    isLink <- strsplit(img, '/')[[1]][1] %in% c('https:', 'http:')
+    ext <- tools::file_ext(img)
+    if (isLink) {
+        msg_note(glue::glue("Fetching img from {img}"))
+        z <- glue::glue(tempfile(), '.{ext}')
+        download.file(img, z)
+        img <- z
+    }
+    if (ext == 'png') {
+        img <- png::readPNG(img)
+    }
+    else if (ext == 'jpeg') {
+        img <- jpeg::readJPEG(img)
+    } 
+    else {
+        stop(msg_warning("Please provide a png or jpeg image"))
+    }
     rgb_2_hex <- function(cols) {rgb(cols[[1]], cols[[2]], cols[[3]], maxColorValue = 1)}
     cols <- lapply(1:dim(img)[1], function(i) {
         lapply(1:dim(img)[2], function(j) {rgb_2_hex(img[i, j, ])}) %>% unlist()
@@ -78,4 +112,13 @@ getPaletteFromImg <- function(img, ncols = 5) {
     return(cols[1:ncols])
 }
 
+
+filterBy <- function(project, label = 'dist_shape') {
+    data <- project$plot_data
+    top <- project$top
+    vec <- data[[label]]
+    data$step <- as.numeric(cut(vec, project$top, include.lowest = TRUE))
+    project$plot_data <- data
+    return(project)
+}
 
