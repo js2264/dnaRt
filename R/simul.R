@@ -16,8 +16,9 @@ randomProject <- function(
 		given <- sample(dnaRt::names, 1)
 		dob <- as.Date("01/01/1990", "%d/%m/%Y") + sample(1:1825, 1)
 	}
-	d <- as.Date(dob, "%d/%m/%Y")
-	y <- as.numeric(substr(d, 1, 4))
+	dob <- as.Date(dob, "%d/%m/%Y")
+	y <- as.numeric(substr(dob, 1, 4))
+    d <- substr(dob, 6, 10)
 	path <- glue::glue("{folder}/{y}-{d}_{given}")
 	dir.create(path)
 	#
@@ -26,7 +27,7 @@ randomProject <- function(
 		"folder" = folder, 
 		"project_path" = path, 
 		"yob" = y, 
-		"dob" = d, 
+		"dob" = dob, 
 		"given" = given, 
 		"top" = top, 
 		"step" = step,
@@ -74,6 +75,9 @@ randomProject <- function(
 		)
 	#
 	msg_success(glue::glue("Successfully simulated graph for {given}, {dob}!"))
+    msg_note(glue::glue("Folder: {folder}"))
+    msg_note(glue::glue("D.O.B.: {dob}"))
+    msg_note(glue::glue("Given name: {given}"))
 	project[["data"]] <- plotdf
 	return(project)
 }

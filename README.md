@@ -46,7 +46,6 @@ Plots can be piped with `magrittr`:
 ```r
 library(magrittr)
 # ------- Make several graphics with options (shape, filtering, both)
-dnart_project <- randomProject(seed = 2002)
 dnart_project %>%
 	plotArt(age = 2) %>% 
 	plotArt(age = 10) 
@@ -82,6 +81,12 @@ dnart_project %>%
 	plotArt(age = 80)
 ```
 
+## Random plots 
+
+```r
+list_projects <- parallel::mclapply(mc.cores = 4, 1:50, function(seed) randomProject(seed = seed))
+```
+
 ## Using custom palettes
 
 ```r
@@ -93,7 +98,7 @@ dnart_project %>%
 dnart_project %>%
 	addRingShape() %>% 
 	addPalette(scico::scale_fill_scico(palette = 'vik')) %>% 
-	plotArt(age = 50)
+	plotArt(age = 51)
 
 # ---- Palette from Rcolorbrewer
 pal = "RdYlBu"
@@ -138,3 +143,4 @@ plotArt(
 	pdf = glue::glue('plot_palette.', 'gradient', '.pdf')
 )
 ```
+
