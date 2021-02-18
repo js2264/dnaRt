@@ -120,3 +120,18 @@ plotArt <- function(
     project$plot <- p
     invisible(project)
 }
+
+plotAges <- function(
+    project, 
+    ages, 
+    theme.args = NULL
+) {
+    for (age in ages) {
+        plotArt(
+            project, 
+            date = NULL, 
+            age = age,  
+            theme.args = NULL
+        )
+    }
+}

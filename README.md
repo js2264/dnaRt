@@ -85,6 +85,8 @@ dnart_project %>%
 
 ```r
 list_projects <- parallel::mclapply(mc.cores = 4, 1:50, function(seed) randomProject(seed = seed))
+# Plot several ages
+plotAges(list_projects[[1]], seq(1, 30, by = 3))
 ```
 
 ## Using custom palettes
