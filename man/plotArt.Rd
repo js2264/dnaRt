@@ -8,10 +8,13 @@ plotArt(
   project,
   date = NULL,
   age = NULL,
-  pdf = NULL,
+  file = NULL,
   path = NULL,
   theme.args = NULL,
-  zoom = 1
+  zoom = 1,
+  background = FALSE,
+  ratio = 1,
+  orientation = "portrait"
 )
 }
 \arguments{
@@ -21,13 +24,13 @@ plotArt(
 
 \item{age}{}
 
-\item{pdf}{}
-
 \item{path}{}
 
 \item{theme.args}{}
 
 \item{zoom}{}
+
+\item{pdf}{}
 }
 \value{
 project (invisible)

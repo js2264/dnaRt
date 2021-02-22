@@ -56,16 +56,20 @@ ellipsisCurve <- function(nrow = 1000, seed = 1, a = NULL, b = NULL, c = NULL) {
     #
     x <- c(seq(xlims[1], xlims[2], length.out = nrow/4), seq(xlims[1], xlims[2], length.out = nrow/4))
     y <- suppressWarnings(c(sqrt(a*(x^3)+b*x+c), -sqrt(a*(x^3)+b*x+c)))
-    d <- data.frame(
-        x = scales::rescale(x, c(0.2, 0.8)), 
-        y = scales::rescale(y, c(0.2, 0.8))
-    ) %>% 
+    d <- data.frame(x = x, y = y) %>% 
+        fitXY(c(0.2, 0.8)) %>%
         rotateXY(angle = angle) %>% 
-        dplyr::mutate(
-            x = scales::rescale(x, c(0.2, 0.8)), 
-            y = scales::rescale(y, c(0.2, 0.8))
-        )
+        fitXY(c(0.2, 0.8))
     return(d)
+}
+
+fitXY <- function(xy, lims = c(0, 1)) {
+    res <- data.frame(
+        scales::rescale(xy[, 1], lims), 
+        scales::rescale(xy[, 2], lims) 
+    )
+    colnames(res) <- colnames(xy)
+    return(res)
 }
 
 rotateXY <- function(xy, angle = pi/4) {
@@ -83,7 +87,7 @@ addNoise <- function(xy, seed, grain = 200) {
 }
 
 distanceToPoints <- function(data, points) {
-    geoms_el <- points %>% 
+    geoms <- points %>% 
         dplyr::filter(!is.na(x), !is.na(y)) %>% 
         dplyr::mutate(geom = sf::st_sfc(lapply(1:nrow(.), function(K) sf::st_point(as.numeric(.[K,]))))) %>% 
         dplyr::pull(geom)
@@ -92,7 +96,7 @@ distanceToPoints <- function(data, points) {
         dplyr::filter(!is.na(x), !is.na(y)) %>% 
         dplyr::mutate(geom = sf::st_sfc(lapply(1:nrow(.), function(K) sf::st_point(as.numeric(.[K,]))))) %>% 
         dplyr::pull(geom)
-    nearest_el <- geoms_el[sf::st_nearest_feature(sf_points, geoms_el)]
+    nearest_el <- geoms[sf::st_nearest_feature(sf_points, geoms)]
     d <- sapply(1:nrow(data), function(K) sf::st_distance(sf_points[K], nearest_el[K]))
     return(d)
 }

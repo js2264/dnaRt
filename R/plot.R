@@ -16,10 +16,13 @@ plotArt <- function(
     project, 
     date = NULL, 
     age = NULL,  
-    pdf = NULL, 
+    file = NULL, 
     path = NULL,
     theme.args = NULL,
-    zoom = 1
+    zoom = 1, 
+    background = FALSE, 
+    ratio = 1, 
+    orientation = 'portrait'
 ) {
     `%>%` <- tidyr::`%>%`
     library(ggplot2)
@@ -49,8 +52,7 @@ plotArt <- function(
         type <- 'raw'
     }
     # ------- Get step if missing
-    if (!'step' %in% colnames(plotdf)) 
-        plotdf$step <- factor(plotdf$year)
+    if (!'step' %in% colnames(plotdf)) plotdf$step <- factor(plotdf$year)
     # ------- Set the limit for filtering (based on a input date, input age, or no filtering)
     set.seed(digest::digest2int(glue::glue("{yob}{dob}")))
     if (is.null(age) & !is.null(date)) {
@@ -76,11 +78,19 @@ plotArt <- function(
         msg_warning("Age is higher than the maximum computed age. Retry with lower age.")
         stop()
     }
+    # ------- Import plot df 
+    df_base <- plotdf
+    df <- df_base
     # ------- Filter nodes <= year
-    df <- plotdf %>% dplyr::filter(as.numeric(step) <= limit) 
+    df <- df %>% dplyr::filter(as.numeric(step) <= limit) 
     # ------- Make sure that data ranges are rescaled to 0-1
-    df$x_final <- scales::rescale(df$x_final, c(0, 1))
-    df$y_final <- scales::rescale(df$y_final, c(0, 1))
+    df[, c('x_final', 'y_final')] <- fitXY(df[, c('x_final', 'y_final')])
+    # ------- Rescale y's to ratio
+    df$y_final <- scales::rescale(df$y_final, c(0, ratio))
+    # ------- Flip xs and ys if landscape mode
+    if (orientation == 'landscape') {
+        ratio <- 1/ratio
+    }
     # ------- Add fill aesthetics and colored_tiles
     set.seed(digest::digest2int(given))
     K <- round(nrow(df) / {2 - (limit/top)})
@@ -91,29 +101,41 @@ plotArt <- function(
             colored_tile = sample(c(sample(2:1000, K, replace = TRUE), rep(1, K_rest))),
             colored_tile_alpha = sapply(colored_tile, function(x) ifelse(x == 1, 0, 0.6))
         )
+    # ------- Add background
+    if (background) {
+        baseplot <- backgroundTiles()
+    } 
+    else {
+        baseplot <- ggplot(df)
+    }
     # ------- Plot graph 
     blacks <- scale_fill_gradient(low = 'white', high = '#000000')
-    p <- ggplot(df) + 
+    p <- baseplot + 
         ggforce::geom_voronoi_tile(
-            aes(x = x_final, y = y_final, fill = fill), alpha = 0.6,
-            expand = unit(-.5, 'mm'), radius = unit(0.25, 'mm'), max.radius = 0.01
+            data = df, aes(x = x_final, y = y_final, fill = fill), 
+            alpha = 0.6,
+            expand = unit(-.5, 'mm'), 
+            radius = unit(0.25, 'mm'), 
+            max.radius = 0.01, 
+            normalize = TRUE, 
+            asp.ratio = 1/ratio
         ) + blacks + ggnewscale::new_scale_fill() +
         ggforce::geom_voronoi_tile(
-            aes(x = x_final, y = y_final, fill = colored_tile, alpha = colored_tile), 
-            expand = unit(-.25, 'mm'), radius = unit(0.25, 'mm'), max.radius = 0.0125
+            data = df, aes(x = x_final, y = y_final, fill = colored_tile, alpha = colored_tile), 
+            expand = unit(-.25, 'mm'), 
+            radius = unit(0.25, 'mm'), 
+            max.radius = 0.0125, 
+            normalize = TRUE, 
+            asp.ratio = 1/ratio
         ) + palette + 
         theme_void() + 
-        coord_cartesian(expand = FALSE) + 
-        theme(legend.position = 'none') + 
-        lims(
-            x = c(min(df$x_final)-0.05, max(df$x_final)+0.05), 
-            y = c(min(df$y_final)-0.05, max(df$y_final)+0.05)
-        )
+        theme(legend.position = 'none')
+    # ------- Add theme arguments
     if (!is.null(theme.args)) p <- p + theme.args
-    # ------- Zoom plot
-    if (zoom > 1) p <- zoomify(p, zoom)
-    # ---------- Save plot
-    if (is.null(pdf)) {
+    # ------- Zoom & frame the plot
+    p <- zoomify(p, zoom = zoom, ratio = ratio, seed = digest::digest2int(given))
+    # ------- Save plot
+    if (is.null(file)) {
         if (is.null(path)) {
             plot_path <- glue::glue("{project_path}/plots/plot_{given}_{dob}_{type}_{date}.pdf")
         }
@@ -122,14 +144,13 @@ plotArt <- function(
         }
     }
     else {
-        plot_path <- pdf
+        plot_path <- file
     }
-    basedir <- 
     if (!dir.exists(dirname(plot_path))) 
         dir.create(dirname(plot_path), showWarnings = FALSE)
-    ggsave(plot = p, plot_path, width = 49, height = 49, units = 'in')
+    ggsave(plot = p, plot_path, width = 49/ratio, height = 49, units = 'in', limitsize = FALSE)
     msg_success(glue::glue("Plot saved in {plot_path}"))
-    # Return project
+    # ------- Return project
     project$plot <- p
     invisible(project)
 }
@@ -149,22 +170,37 @@ plotAges <- function(
     }
 }
 
-addBackground <- function() {
-
+backgroundTiles <- function(density = 1000, radius = 0.001, fill = '#949494', col = '#bdbdbdc9') {
+    set.seed(1)
+    df <- data.frame(
+        x = sample(seq(-1, 2, length.out = 10000), density, replace = TRUE),
+        y = sample(seq(-1, 2, length.out = 10000), density, replace = TRUE), 
+        fill = sample(seq(0, 0.3, length.out = 10000), density, replace = TRUE)
+    )
+    p <- ggplot(df, aes(x, y, fill = fill)) + 
+        ggforce::geom_delaunay_tile(
+            radius = radius, 
+            col = col
+        ) + 
+        ggplot2::scale_fill_brewer(palette = 'Greys') + 
+        theme_void() +
+        theme(legend.position = 'none') + 
+        coord_cartesian(xlim = c(-0.05, 1.05), ylim = c(-0.05, 1.05), expand = FALSE, clip = "off") 
 }
 
-zoomify <- function(p, factor = 2) {
-    pp <- ggplot_build(p)
-    xrange <- pp$layout$panel_params[[1]]$x.range
-    yrange <- pp$layout$panel_params[[1]]$y.range
+zoomify <- function(p, zoom = 1, ratio = 1, seed) {
+    zooms <- c(0, 0.25, 0.33, 0.5, 0.6, 0.66, 0.71, 0.75, 0.77, 0.80)/2
+    set.seed(seed)
     xlims <- c(
-        xrange[1]*(1 - factor/10),
-        xrange[2]*(1 - factor/10)
-    )
+        zooms[zoom],
+        1 - zooms[zoom]
+    ) + sample(seq(0, 0.097, by = 0.01), 1) * (1-zoom)/2/10
     ylims <- c(
-        yrange[1]*(1 - factor/10),
-        yrange[2]*(1 - factor/10)
+        (zooms[zoom]) * ratio,
+        (1 - zooms[zoom]) * ratio
+    ) + sample(seq(0, 0.097, by = 0.01), 1) * (1-zoom)/2/10
+    p <- p + coord_cartesian(
+        xlim = xlims, ylim = ylims, expand = FALSE, clip = "off"
     )
-    p <- p + coord_cartesian(xlim = xlims, ylim = ylims, expand = FALSE)
     return(p)
 }

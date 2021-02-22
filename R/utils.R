@@ -77,11 +77,7 @@ checkPalette <- function(cols) {
     return(p)
 }
 
-#' getPaletteFromImg
-#'
-#' @export
-
-getPaletteFromImg <- function(img, ncols = 5) {
+readImg <- function(img) {
     isLink <- strsplit(img, '/')[[1]][1] %in% c('https:', 'http:')
     ext <- tools::file_ext(img)
     if (isLink) {
@@ -93,15 +89,27 @@ getPaletteFromImg <- function(img, ncols = 5) {
     if (ext == 'png') {
         img <- png::readPNG(img)
     }
-    else if (ext == 'jpeg') {
+    else if (ext == 'jpeg' | ext == 'jpg') {
         img <- jpeg::readJPEG(img)
     } 
     else {
         stop(msg_warning("Please provide a png or jpeg image"))
     }
-    rgb_2_hex <- function(cols) {rgb(cols[[1]], cols[[2]], cols[[3]], maxColorValue = 1)}
+    return(img)
+}
+
+rgb2hex <- function(cols) {
+    rgb(cols[[1]], cols[[2]], cols[[3]], maxColorValue = 1)
+}
+
+#' getPaletteFromImg
+#'
+#' @export
+
+getPaletteFromImg <- function(img, ncols = 5) {
+    img <- readImg(img)
     cols <- lapply(1:dim(img)[1], function(i) {
-        lapply(1:dim(img)[2], function(j) {rgb_2_hex(img[i, j, ])}) %>% unlist()
+        lapply(1:dim(img)[2], function(j) {rgb2hex(img[i, j, ])}) %>% unlist()
     }) %>% 
         do.call(c, .) %>% 
         table() %>% 
