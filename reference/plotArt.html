@@ -117,7 +117,18 @@
     <p>plotArt</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotArt</span><span class='op'>(</span><span class='va'>project</span>, date <span class='op'>=</span> <span class='cn'>NULL</span>, age <span class='op'>=</span> <span class='cn'>NULL</span>, pdf <span class='op'>=</span> <span class='cn'>NULL</span>, theme.args <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plotArt</span><span class='op'>(</span>
+  <span class='va'>project</span>,
+  date <span class='op'>=</span> <span class='cn'>NULL</span>,
+  age <span class='op'>=</span> <span class='cn'>NULL</span>,
+  file <span class='op'>=</span> <span class='cn'>NULL</span>,
+  path <span class='op'>=</span> <span class='cn'>NULL</span>,
+  theme.args <span class='op'>=</span> <span class='cn'>NULL</span>,
+  zoom <span class='op'>=</span> <span class='fl'>1</span>,
+  background <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  ratio <span class='op'>=</span> <span class='fl'>1</span>,
+  orientation <span class='op'>=</span> <span class='st'>"portrait"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,7 +146,7 @@
       <td></td>
     </tr>
     <tr>
-      <th>pdf</th>
+      <th>path</th>
       <td></td>
     </tr>
     <tr>
@@ -143,7 +154,11 @@
       <td></td>
     </tr>
     <tr>
-      <th>palette</th>
+      <th>zoom</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>pdf</th>
       <td></td>
     </tr>
     </table>

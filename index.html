@@ -78,28 +78,28 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"js2264/dnaRt"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="quick-use" class="section level2">
+<div id="dnart-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#quick-use" class="anchor"></a>Quick use</h2>
+<a href="#dnart-1" class="anchor"></a>dnArt</h2>
+<div id="quick-use" class="section level3">
+<h3 class="hasAnchor">
+<a href="#quick-use" class="anchor"></a>Quick use</h3>
 <p>This is a basic example which shows you how to generate dn&amp;art graphics. I used my “variables” to define the project:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/dnaRt">dnaRt</a></span><span class="op">)</span>
 <span class="co"># ------- Initiate project</span>
 <span class="va">dnart_project</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dnart.html">dnart</a></span><span class="op">(</span>
-    dob <span class="op">=</span> <span class="st">"20/06/1992"</span>, 
+    folder <span class="op">=</span> <span class="st">'data'</span>,
     given <span class="op">=</span> <span class="st">"jacques"</span>, 
-    top <span class="op">=</span> <span class="fl">100</span>, 
-    folder <span class="op">=</span> <span class="st">'data'</span>, 
-    step <span class="op">=</span> <span class="fl">5</span>, 
-    width <span class="op">=</span> <span class="fl">100</span>, 
-    cores <span class="op">=</span> <span class="fl">5</span>
+    dob <span class="op">=</span> <span class="st">"20/06/1992"</span>, 
+    top <span class="op">=</span> <span class="fl">100</span>
 <span class="op">)</span>
 <span class="co"># ------- Make default, full art</span>
 <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="plot-with-shapes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plot-with-shapes" class="anchor"></a>Plot with shapes</h2>
+<div id="plot-with-shapes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#plot-with-shapes" class="anchor"></a>Plot with shapes</h3>
 <p>Plots can be piped with <code>magrittr</code>:</p>
 <p><code>filterBy()</code> is used to specify which value to use to filter out points:</p>
 <ul>
@@ -110,7 +110,6 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org">magrittr</a></span><span class="op">)</span>
 <span class="co"># ------- Make several graphics with options (shape, filtering, both)</span>
-<span class="va">dnart_project</span> <span class="op">&lt;-</span> <span class="fu">randomProject</span><span class="op">(</span>seed <span class="op">=</span> <span class="fl">2002</span><span class="op">)</span>
 <span class="va">dnart_project</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> 
@@ -145,11 +144,27 @@
     <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">80</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="using-custom-palettes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-custom-palettes" class="anchor"></a>Using custom palettes</h2>
+<div id="simulated-plots" class="section level3">
+<h3 class="hasAnchor">
+<a href="#simulated-plots" class="anchor"></a>Simulated plots</h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># ---- Palette from scico package</span>
+<code class="sourceCode R"><span class="co"># ------ Simulate a single project</span>
+<span class="va">proj</span> <span class="op">&lt;-</span> <span class="fu">randomProject</span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span><span class="va">proj</span><span class="op">)</span>
+<span class="co"># ------ Simulate several projects</span>
+<span class="va">list_projects</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/mclapply.html">mclapply</a></span><span class="op">(</span>mc.cores <span class="op">=</span> <span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="kw">function</span><span class="op">(</span><span class="va">seed</span><span class="op">)</span> <span class="fu">randomProject</span><span class="op">(</span>seed <span class="op">=</span> <span class="va">seed</span>, nedges <span class="op">=</span> <span class="st">'max'</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># ------ Plot several ages for a single plot</span>
+<span class="fu">plotAges</span><span class="op">(</span><span class="va">list_projects</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">20</span>, by <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># ------ Plot a single year for multiple plots</span>
+<span class="va">list_projects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">list_projects</span>, <span class="va">plotArt</span>, path <span class="op">=</span> <span class="st">'results'</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="using-custom-palettes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#using-custom-palettes" class="anchor"></a>Using custom palettes</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sample_data</span>, package <span class="op">=</span> <span class="st">'dnaRt'</span><span class="op">)</span>
+<span class="va">dnart_project</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dnart.html">dnart</a></span><span class="op">(</span>given <span class="op">=</span> <span class="st">'James'</span>, dob <span class="op">=</span> <span class="st">'11/11/1990'</span>, data <span class="op">=</span> <span class="va">sample_data</span><span class="op">)</span>
+<span class="co"># ---- Palette from scico package</span>
 <span class="va">dnart_project</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="reference/addRingShape.html">addRingShape</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="reference/addPalette.html">addPalette</a></span><span class="op">(</span><span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'davos'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -157,15 +172,19 @@
 <span class="va">dnart_project</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="reference/addRingShape.html">addRingShape</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="reference/addPalette.html">addPalette</a></span><span class="op">(</span><span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'vik'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
-
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">51</span><span class="op">)</span>
 <span class="co"># ---- Palette from Rcolorbrewer</span>
 <span class="va">pal</span> <span class="op">=</span> <span class="st">"RdYlBu"</span>
 <span class="va">dnart_project</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="reference/addRingShape.html">addRingShape</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="reference/addPalette.html">addPalette</a></span><span class="op">(</span><span class="fu">scale_fill_distiller</span><span class="op">(</span>palette <span class="op">=</span> <span class="va">pal</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
-
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">52</span><span class="op">)</span>
+<span class="co"># ---- Palette from Wes Anderson movies</span>
+<span class="va">pal</span> <span class="op">=</span> <span class="fu">scale_fill_gradientn</span><span class="op">(</span>colours <span class="op">=</span> <span class="fu">wesanderson</span><span class="fu">::</span><span class="fu">wes_palette</span><span class="op">(</span><span class="st">"Royal1"</span>, <span class="fl">5</span>, type <span class="op">=</span> <span class="st">"continuous"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">dnart_project</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/addRingShape.html">addRingShape</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/addPalette.html">addPalette</a></span><span class="op">(</span><span class="va">pal</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">53</span><span class="op">)</span>
 <span class="co"># ---- Palette generated from main colors from an image</span>
 <span class="va">img</span> <span class="op">&lt;-</span> <span class="st">"https://miro.medium.com/max/2000/1*QhGyZ9TJDFy_pWwnhCcZqA.png"</span>
 <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getPaletteFromImg.html">getPaletteFromImg</a></span><span class="op">(</span><span class="va">img</span>, ncols <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
@@ -173,34 +192,89 @@
 <span class="va">dnart_project</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="reference/addRingShape.html">addRingShape</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="reference/addPalette.html">addPalette</a></span><span class="op">(</span><span class="fu">scale_fill_gradientn</span><span class="op">(</span>colors <span class="op">=</span> <span class="va">cols</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">10</span>, <span class="fl">11</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">16</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>
-        age <span class="op">=</span> <span class="fl">90</span>, 
-        pdf <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">'plot_palette.'</span>, <span class="st">'gradient'</span>, <span class="st">'.pdf'</span><span class="op">)</span>
-    <span class="op">)</span>
-
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">54</span><span class="op">)</span>
 <span class="co"># ---- Custom palette from discrete colors</span>
 <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'#ebebeb'</span>, <span class="st">'#e3e3e3'</span>, <span class="st">'#c9c9c9'</span>, <span class="st">'#636363'</span>, <span class="st">'#575757'</span>, <span class="st">'#4a4949'</span><span class="op">)</span>
 <span class="va">dnart_project</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="reference/addRingShape.html">addRingShape</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="reference/addPalette.html">addPalette</a></span><span class="op">(</span><span class="fu">scale_fill_gradientn</span><span class="op">(</span>colors <span class="op">=</span> <span class="va">cols</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fl">55</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="advanced-customization" class="section level3">
+<h3 class="hasAnchor">
+<a href="#advanced-customization" class="anchor"></a>Advanced customization</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dnart_project</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dnart.html">dnart</a></span><span class="op">(</span>given <span class="op">=</span> <span class="st">'James'</span>, dob <span class="op">=</span> <span class="st">'11/11/1991'</span>, data <span class="op">=</span> <span class="va">sample_data</span><span class="op">)</span>
+<span class="co"># ---- Zooming to a portion of the plot </span>
+<span class="va">dnart_project</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>pdf <span class="op">=</span> <span class="st">'zoom-factor1.pdf'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>zoom <span class="op">=</span> <span class="fl">2</span>, pdf <span class="op">=</span> <span class="st">'zoom-factor2.pdf'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>zoom <span class="op">=</span> <span class="fl">3</span>, pdf <span class="op">=</span> <span class="st">'zoom-factor3.pdf'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>zoom <span class="op">=</span> <span class="fl">4</span>, pdf <span class="op">=</span> <span class="st">'zoom-factor4.pdf'</span><span class="op">)</span> 
+<span class="co"># ---- Rectangle ratio</span>
+<span class="va">dnart_project</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>ratio <span class="op">=</span> <span class="fl">3</span><span class="op">/</span><span class="fl">2</span>, pdf <span class="op">=</span> <span class="st">'ratio-3/2.pdf'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>ratio <span class="op">=</span> <span class="fl">2</span>, pdf <span class="op">=</span> <span class="st">'ratio-2.pdf'</span><span class="op">)</span>
+<span class="co"># ---- Adding solid background</span>
+<span class="va">dnart_project</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="reference/addPalette.html">addPalette</a></span><span class="op">(</span><span class="fu">scico</span><span class="fu">::</span><span class="fu">scale_fill_scico</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'vik'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>
-        age <span class="op">=</span> <span class="fl">90</span>, 
-        pdf <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">'plot_palette.'</span>, <span class="st">'gradient'</span>, <span class="st">'.pdf'</span><span class="op">)</span>
+        theme.args <span class="op">=</span> <span class="fu">theme</span><span class="op">(</span>plot.background <span class="op">=</span> <span class="fu">element_rect</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#fffbf2"</span><span class="op">)</span><span class="op">)</span>,
+        pdf <span class="op">=</span> <span class="st">'solid-background.pdf'</span>
+    <span class="op">)</span>
+<span class="co"># ---- Background for MPB</span>
+<span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span><span class="va">dnart_project</span>, ratio <span class="op">=</span> <span class="fl">1.6</span>, pdf <span class="op">=</span> <span class="st">'MBP-background.pdf'</span><span class="op">)</span>
+<span class="co"># ------ Plot portrait or landscape</span>
+<span class="va">pal</span> <span class="op">=</span> <span class="fu">scale_fill_gradientn</span><span class="op">(</span>colours <span class="op">=</span> <span class="fu">wesanderson</span><span class="fu">::</span><span class="fu">wes_palette</span><span class="op">(</span><span class="st">"FantasticFox1"</span>, <span class="fl">5</span>, type <span class="op">=</span> <span class="st">"continuous"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">proj</span> <span class="op">&lt;-</span> <span class="va">list_projects</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/addPalette.html">addPalette</a></span><span class="op">(</span><span class="va">pal</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>
+        path <span class="op">=</span> <span class="st">'orientations'</span>, 
+        ratio <span class="op">=</span> <span class="fl">1.66</span>, 
+        zoom <span class="op">=</span> <span class="fl">3</span>, 
+        orientation <span class="op">=</span> <span class="st">'portrait'</span>, 
+        file <span class="op">=</span> <span class="st">'portrait.pdf'</span>
+    <span class="op">)</span>
+<span class="va">proj</span> <span class="op">&lt;-</span> <span class="va">list_projects</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/addPalette.html">addPalette</a></span><span class="op">(</span><span class="va">pal</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>
+        path <span class="op">=</span> <span class="st">'orientations'</span>, 
+        ratio <span class="op">=</span> <span class="fl">1.66</span>, 
+        zoom <span class="op">=</span> <span class="fl">3</span>, 
+        orientation <span class="op">=</span> <span class="st">'landscape'</span>, 
+        file <span class="op">=</span> <span class="st">'landscape.pdf'</span>
     <span class="op">)</span></code></pre></div>
 </div>
-<div id="further-customizing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#further-customizing" class="anchor"></a>Further customizing</h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># ---- Adding background</span>
-<span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'#ebebeb'</span>, <span class="st">'#e3e3e3'</span>, <span class="st">'#c9c9c9'</span>, <span class="st">'#636363'</span>, <span class="st">'#575757'</span>, <span class="st">'#4a4949'</span><span class="op">)</span>
-<span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>
-    <span class="fu">getRingRadius</span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span>, 
-    age <span class="op">=</span> <span class="fl">90</span>, 
-    palette <span class="op">=</span> <span class="fu">scale_fill_gradientn</span><span class="op">(</span>colors <span class="op">=</span> <span class="va">cols</span><span class="op">)</span>, 
-    theme.args <span class="op">=</span> <span class="fu">theme</span><span class="op">(</span>plot.background <span class="op">=</span> <span class="fu">element_rect</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#000000"</span><span class="op">)</span><span class="op">)</span>,
-    pdf <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">'plot_palette.'</span>, <span class="st">'gradient'</span>, <span class="st">'.pdf'</span><span class="op">)</span>
+<div id="generating-hundreds-of-wallpapers" class="section level3">
+<h3 class="hasAnchor">
+<a href="#generating-hundreds-of-wallpapers" class="anchor"></a>Generating hundreds of wallpapers</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># ------ Simulate several projects</span>
+<span class="va">list_projects</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/mclapply.html">mclapply</a></span><span class="op">(</span>mc.cores <span class="op">=</span> <span class="fl">5</span>, <span class="fl">51</span><span class="op">:</span><span class="fl">100</span>, <span class="kw">function</span><span class="op">(</span><span class="va">seed</span><span class="op">)</span> <span class="fu">randomProject</span><span class="op">(</span>seed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span><span class="op">)</span>
+<span class="va">list_plots</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/mclapply.html">mclapply</a></span><span class="op">(</span>mc.cores <span class="op">=</span> <span class="fl">5</span>, 
+    <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">list_projects</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">K</span><span class="op">)</span> <span class="op">{</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="va">K</span><span class="op">)</span>
+        <span class="va">cols</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="reference/names.html">names</a></span><span class="op">(</span><span class="fu">wesanderson</span><span class="fu">::</span><span class="va">wes_palettes</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>
+        <span class="va">pal</span> <span class="op">=</span> <span class="fu">scale_fill_gradientn</span><span class="op">(</span>colours <span class="op">=</span> <span class="fu">wesanderson</span><span class="fu">::</span><span class="fu">wes_palette</span><span class="op">(</span><span class="va">cols</span>, <span class="fl">5</span>, type <span class="op">=</span> <span class="st">"continuous"</span><span class="op">)</span><span class="op">)</span>
+        <span class="va">proj</span> <span class="op">&lt;-</span> <span class="va">list_projects</span><span class="op">[[</span><span class="va">K</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span> 
+            <span class="fu"><a href="reference/addPalette.html">addPalette</a></span><span class="op">(</span><span class="va">pal</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+            <span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span>
+                path <span class="op">=</span> <span class="st">'backgrounds'</span>, 
+                ratio <span class="op">=</span> <span class="fl">1</span>, 
+                zoom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span>
+            <span class="op">)</span>
+    <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
+</div>
+</div>
+<div id="voronoi-transformation-of-pre-existing-image" class="section level2">
+<h2 class="hasAnchor">
+<a href="#voronoi-transformation-of-pre-existing-image" class="anchor"></a>Voronoi transformation of pre-existing image</h2>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="st">'~/Documents/Admin/__Photo/photo_in_lab_square-01.png'</span> <span class="op">%&gt;%</span> 
+    <span class="fu">readImg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu">binImg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu">voronoiTiles</span><span class="op">(</span><span class="va">img</span>, density <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
   </div>
