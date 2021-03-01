@@ -21,13 +21,31 @@ voronoiTiles <- function(
         dplyr::pull(geom)
     df$hex <- img$hex[sf::st_nearest_feature(points, geoms)]
     df$hex <- factor(df$hex, levels = unique(df$hex))
-    p <- ggplot(df, aes(x, dims[2]-y, group = -1L)) + 
-        ggforce::geom_voronoi_tile(aes(fill = hex)) +
+    # ---- Rescale df 
+    r <- diff(range(df$x))/diff(range(df$y))
+    df$x_final <- scales::rescale(df$x, c(0, 1))
+    df$y_final <- scales::rescale(dims[2]-df$y, c(0, 1/r))
+    # ---- Filter df borders
+    xlims <- c(quantile(df$x_final, 0.05), quantile(df$x_final, 0.95))
+    ylims <- c(quantile(df$y_final, 0.05/r), quantile(df$y_final, 1 - (0.05/r)))
+    bounding <- data.frame(x = c(xlims[1], xlims[1], xlims[2], xlims[2]), y = c(ylims[1], ylims[2], ylims[2], ylims[1]))
+    p <- ggplot(df, aes(x_final, y_final, group = -1L)) + 
+        ggforce::geom_voronoi_tile(
+            aes(fill = hex),
+            col = '#00000000'
+        ) +
+        ggforce::geom_voronoi_tile(
+            data = df[sample(1:density, density/4), ],
+            aes(x_final, y_final, group = -1L, fill = hex), 
+            alpha = 0, 
+            col = '#000000', 
+            size = 0.1
+        ) +
         ggplot2::scale_color_manual(values = levels(df$hex)) + 
         ggplot2::scale_fill_manual(values = levels(df$hex)) + 
-        theme_void() +
-        theme(legend.position = 'none') + 
-        coord_fixed(ratio = 1) 
+        ggplot2::theme_void() +
+        ggplot2::theme(legend.position = 'none') + 
+        ggplot2::coord_cartesian(xlim = c(max(df$x_final)*0.05, max(df$x_final)*0.95), ylim = c(max(df$y_final)*0.05, max(df$y_final)*0.95))
     return(p)
 }
 

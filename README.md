@@ -31,6 +31,7 @@ dnart_project <- dnart(
 )
 # ------- Make default, full art
 plotArt(dnart_project)
+plotArt_2(dnart_project)
 ```
 
 ### Plot with shapes
@@ -98,7 +99,7 @@ list_projects <- lapply(list_projects, plotArt, path = 'results')
 
 ```r
 data(sample_data, package = 'dnaRt')
-dnart_project <- dnart(given = 'James', dob = '11/11/1990', data = sample_data)
+dnart_project <- dnart(given = 'Jacques', dob = '20/06/1992', data = sample_data)
 # ---- Palette from scico package
 dnart_project %>%
 	addRingShape() %>% 
@@ -109,10 +110,9 @@ dnart_project %>%
 	addPalette(scico::scale_fill_scico(palette = 'vik')) %>% 
 	plotArt(age = 51)
 # ---- Palette from Rcolorbrewer
-pal = "RdYlBu"
 dnart_project %>%
 	addRingShape() %>% 
-	addPalette(scale_fill_distiller(palette = pal)) %>% 
+	addPalette(scale_fill_distiller(palette = "RdYlBu")) %>% 
 	plotArt(age = 52)
 # ---- Palette from Wes Anderson movies
 pal = scale_fill_gradientn(colours = wesanderson::wes_palette("Royal1", 5, type = "continuous"))
@@ -121,35 +121,58 @@ dnart_project %>%
 	addPalette(pal) %>% 
 	plotArt(age = 53)
 # ---- Palette generated from main colors from an image
-img <- "https://miro.medium.com/max/2000/1*QhGyZ9TJDFy_pWwnhCcZqA.png"
+img <- system.file("extdata", "PK03T1.jpg", package = "dnaRt")
 cols <- getPaletteFromImg(img, ncols = 20)
 colplot <- checkPalette(cols)
 dnart_project %>% 
 	addRingShape() %>% 
-	addPalette(scale_fill_gradientn(colors = cols[c(1, 2, 6, 9, 10, 11, 12, 15, 16)])) %>% 
+	addPalette(scale_fill_gradientn(colors = cols[c(1, 3:8)])) %>% 
 	plotArt(age = 54)
-# ---- Custom palette from discrete colors
+# ---- Custom continuous palette from discrete colors (greys)
 cols <- c('#ebebeb', '#e3e3e3', '#c9c9c9', '#636363', '#575757', '#4a4949')
 dnart_project %>% 
 	addRingShape() %>% 
 	addPalette(scale_fill_gradientn(colors = cols)) %>% 
 	plotArt(age = 55)
+# ---- Mondrian-like palette 
+p <- dnart_project %>% 
+	addRingShape() %>% 
+	addPalette(c(rep('#3c7dff', 3), rep('#fffb00', 3), rep('#c90000', 3), rep('#ffffff', 3), '#000000')) %>% 
+	plotArt(
+		age = 30, 
+		maxsize = 20,
+		ratio = 1.8, 
+		zoom = 6,
+		max.radius = 0.02,
+		theme.args = theme(plot.background = element_rect(fill = "#000000")),
+		file = "dnart_mondrian.pdf",
+		seed = 4
+)
 ```
 
 ### Advanced customization
 
 ```r
-dnart_project <- dnart(given = 'James', dob = '11/11/1991', data = sample_data)
+dnart_project <- dnart(given = 'Jacques', dob = '20/06/1992', data = sample_data)
+# ---- Change size, ratio and zoom of plot
+dnart_project %>% 
+	plotArt(
+		maxsize = 49,
+		ratio = 2/3, 
+		zoom = 3,
+		max.radius = 0.02,
+		file = 'tweaked_dnart.pdf'
+	)
 # ---- Zooming to a portion of the plot 
 dnart_project %>%
-	plotArt(pdf = 'zoom-factor1.pdf') %>%
-	plotArt(zoom = 2, pdf = 'zoom-factor2.pdf') %>%
-	plotArt(zoom = 3, pdf = 'zoom-factor3.pdf') %>%
-	plotArt(zoom = 4, pdf = 'zoom-factor4.pdf') 
+	plotArt(file = 'zoom-factor1.pdf') %>%
+	plotArt(zoom = 2, file = 'zoom-factor2.pdf') %>%
+	plotArt(zoom = 3, file = 'zoom-factor3.pdf') %>%
+	plotArt(zoom = 4, file = 'zoom-factor4.pdf') 
 # ---- Rectangle ratio
 dnart_project %>% 
-	plotArt(ratio = 3/2, pdf = 'ratio-3/2.pdf') %>%
-	plotArt(ratio = 2, pdf = 'ratio-2.pdf')
+	plotArt(ratio = 3/2, file = 'ratio-3/2.pdf') %>%
+	plotArt(ratio = 2, file = 'ratio-2.pdf')
 # ---- Adding solid background
 dnart_project %>%
 	addPalette(scico::scale_fill_scico(palette = 'vik')) %>% 
@@ -158,13 +181,13 @@ dnart_project %>%
 		pdf = 'solid-background.pdf'
 	)
 # ---- Background for MPB
-plotArt(dnart_project, ratio = 1.6, pdf = 'MBP-background.pdf')
+plotArt(dnart_project, ratio = 1.6, file = 'MBP-background.pdf')
 # ------ Plot portrait or landscape
 pal = scale_fill_gradientn(colours = wesanderson::wes_palette("FantasticFox1", 5, type = "continuous"))
 proj <- list_projects[[1]] %>% 
 	addPalette(pal) %>% 
 	plotArt(
-		path = 'orientations', 
+		age = 10, 
 		ratio = 1.66, 
 		zoom = 3, 
 		orientation = 'portrait', 
@@ -173,7 +196,7 @@ proj <- list_projects[[1]] %>%
 proj <- list_projects[[1]] %>% 
 	addPalette(pal) %>% 
 	plotArt(
-		path = 'orientations', 
+		age = 10, 
 		ratio = 1.66, 
 		zoom = 3, 
 		orientation = 'landscape', 
@@ -190,13 +213,18 @@ list_plots <- parallel::mclapply(mc.cores = 5,
 	seq_along(list_projects), function(K) {
 		set.seed(K)
 		cols = sample(names(wesanderson::wes_palettes), 1)
-		pal = scale_fill_gradientn(colours = wesanderson::wes_palette(cols, 5, type = "continuous"))
+		pal = ggplot2::scale_fill_gradientn(colours = wesanderson::wes_palette(cols, 5, type = "continuous"))
+		ratio <- sample(seq(0.5, 1, by = 0.1), 1)
+		zoom <- sample(1:4, 1)
+		file <- with(list_projects[[K]], glue::glue("backgrounds/{given}_{dob}_ratio-{ratio}_zoom-{zoom}.png"))
 		proj <- list_projects[[K]] %>% 
 			addPalette(pal) %>% 
 			plotArt(
-				path = 'backgrounds', 
-				ratio = 1, 
-				zoom = sample(1:4, 1)
+				file = file, 
+				ratio = ratio, 
+				zoom = zoom, 
+				maxsize = 24, 
+				dpi = 120
 			)
 	}
 )
@@ -205,9 +233,19 @@ list_plots <- parallel::mclapply(mc.cores = 5,
 ## Voronoi transformation of pre-existing image
 
 ```r
-p <- '~/Documents/Admin/__Photo/photo_in_lab_square-01.png' %>% 
-	readImg() %>%
-	binImg() %>% 
-	voronoiTiles(img, density = 20000)
+img <- readImg(system.file("extdata", "my_photo.png", package = "dnaRt"))
+size <- scales::rescale(c(dim(img)[1], dim(img)[2]), c(15*dim(img)[2]/dim(img)[1], 15))
+for (dens in c(1000, 2000, 4000, 6000, 8000, 10000, 15000, 20000, 25000)) {
+	message(dens)
+	p <- img %>% 
+		binImg() %>% 
+		voronoiTiles(density = dens)
+	ggsave(glue::glue('voronoi_face_density-{dens}.png'), width = size[2], height = size[1])
+}
+# ---- Nice photo I took during my vacation in Greece 😁
+img <- readImg(system.file("extdata", "DSC_2162.jpg", package = "dnaRt"))
+size <- scales::rescale(c(dim(img)[1], dim(img)[2]), c(15*dim(img)[1]/dim(img)[2], 15))
+img <- binImg(img)
+p <- voronoiTiles(img, density = 15000)
+ggsave('landscape.pdf', width = size[2], height = size[1])
 ```
-
