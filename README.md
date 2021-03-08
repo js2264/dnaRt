@@ -13,7 +13,7 @@ You can install the released version of dnaRt from [Github](https://github.com/j
 remotes::install_github("js2264/dnaRt")
 ```
 
-## dnArt
+## Examples
 
 ### Quick use
 
@@ -48,16 +48,20 @@ library(magrittr)
 # ------- Make several graphics with options (shape, filtering, both)
 dnart_project %>%
 	plotArt(age = 2) %>% 
-	plotArt(age = 10) 
+	plotArt(age = 10) %>% 
+	plotArt(age = 20) 
 #
 dnart_project %>%
 	addRingShape() %>%
 	plotArt(age = 2) %>% 
 	plotArt(age = 10) %>% 
 	filterBy('dist_shape') %>% 
-	plotArt(age = 11) %>% 
+	plotArt(age = 20) %>% 
 	plotArt(age = 40) %>%
-	plotArt(age = 80) 
+	plotArt(age = 60) %>%
+	plotArt(age = 80) %>% 
+	plotArt(age = 90) %>% 
+	plotArt() 
 #
 dnart_project %>%
 	addEllipticShape() %>%
@@ -85,8 +89,19 @@ dnart_project %>%
 
 ```r
 # ------ Simulate a single project
-proj <- randomProject()
-plotArt(proj)
+dnart_project <- randomProject(given = 'Jacques', dob = '20/06/1992')
+plotArt(dnart_project)
+pal = scale_fill_gradientn(colours = wesanderson::wes_palette("Royal1", 5, type = "continuous"))
+dnart_project %>%
+	addPalette(pal) %>% 
+	plotArt(age = 2, max.radius = 0.0075) %>% 
+	plotArt(age = 10, max.radius = 0.0075) %>% 
+	plotArt(age = 20, max.radius = 0.0075) %>% 
+	plotArt(age = 40, max.radius = 0.0075) %>%
+	plotArt(age = 60, max.radius = 0.0075) %>%
+	plotArt(age = 80, max.radius = 0.0075) %>% 
+	plotArt(age = 90, max.radius = 0.0075) %>% 
+	plotArt(max.radius = 0.0075) 
 # ------ Simulate several projects
 list_projects <- parallel::mclapply(mc.cores = 5, 1:5, function(seed) randomProject(seed = seed, nedges = 'max'))
 # ------ Plot several ages for a single plot
@@ -106,8 +121,8 @@ dnart_project %>%
 	addPalette(scico::scale_fill_scico(palette = 'davos')) %>% 
 	plotArt(age = 50)
 dnart_project %>%
-	addRingShape() %>% 
-	addPalette(scico::scale_fill_scico(palette = 'vik')) %>% 
+	# addRingShape() %>% 
+	# addPalette(scico::scale_fill_scico(palette = 'vik')) %>% 
 	plotArt(age = 51)
 # ---- Palette from Rcolorbrewer
 dnart_project %>%
@@ -160,7 +175,7 @@ dnart_project %>%
 		maxsize = 49,
 		ratio = 2/3, 
 		zoom = 3,
-		max.radius = 0.02,
+		max.radius = 0.005,
 		file = 'tweaked_dnart.pdf'
 	)
 # ---- Zooming to a portion of the plot 

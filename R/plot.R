@@ -25,7 +25,7 @@ plotArt <- function(
     background = FALSE,
     maxsize = 49,
     dpi = 300, 
-    max.radius = 0.02,
+    max.radius = 0.0075,
     theme.args = NULL, 
     seed = NULL, 
     ...

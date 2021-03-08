@@ -43,8 +43,12 @@ randomProject <- function(
 		"plotdf_path" = glue::glue("{path}/plotdf.rds")
 	)
 	#
+	SEED <- digest::digest2int(glue::glue(
+		"{project$given}{project$yob}{project$dob}"
+	))
+	#
 	msg_note(glue::glue("Simulating graph..."))
-	set.seed(digest::digest2int(glue::glue("{project$yob}{project$dob}")))
+	set.seed(SEED) 
 	edges <- dnaRt::sample_edges
 	if (nedges == 'max') nedges <- nrow(edges)
 	edges <- edges %>% 
@@ -67,12 +71,12 @@ randomProject <- function(
 	)
 	#
 	msg_note(glue::glue("Computing layout of simulated graph..."))
-	set.seed(digest::digest2int(glue::glue("{project$yob}{project$dob}")))
+	set.seed(SEED)
 	lay <- graphlayouts::layout_with_sparse_stress(graph, pivots = 100) %>% 
 		data.frame(., nodes$idx, nodes$year) %>% 
 		setNames(c('x', 'y', 'idx', 'year'))
 	msg_note(glue::glue("Adding plotting features..."))
-	set.seed(digest::digest2int(glue::glue("{project$yob}{project$dob}")))
+	set.seed(SEED)
 	plotdf <- lay %>% 
 		dplyr::select(idx, x, y, year) %>%
 		dplyr::mutate(
