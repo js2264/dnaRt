@@ -95,8 +95,7 @@
     top <span class="op">=</span> <span class="fl">100</span>
 <span class="op">)</span>
 <span class="co"># ------- Make default, full art</span>
-<span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span>
-<span class="fu">plotArt_2</span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="reference/plotArt.html">plotArt</a></span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="plot-with-shapes" class="section level3">
 <h3 class="hasAnchor">
@@ -339,7 +338,7 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sample_data</span>, package <span class="op">=</span> <span class="st">'dnaRt'</span><span class="op">)</span>
 <span class="va">dnart_project</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dnart.html">dnart</a></span><span class="op">(</span>given <span class="op">=</span> <span class="st">'Jacques'</span>, dob <span class="op">=</span> <span class="st">'20/06/1992'</span>, data <span class="op">=</span> <span class="va">sample_data</span><span class="op">)</span>
-<span class="fu">plotDots</span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="reference/plotDots.html">plotDots</a></span><span class="op">(</span><span class="va">dnart_project</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="link-art" class="section level3">
 <h3 class="hasAnchor">
@@ -347,7 +346,7 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sample_data</span>, package <span class="op">=</span> <span class="st">'dnaRt'</span><span class="op">)</span>
 <span class="va">dnart_project</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dnart.html">dnart</a></span><span class="op">(</span>given <span class="op">=</span> <span class="st">'Jacques'</span>, dob <span class="op">=</span> <span class="st">'20/06/1992'</span>, data <span class="op">=</span> <span class="va">sample_data</span><span class="op">)</span>
-<span class="va">proj</span> <span class="op">&lt;-</span> <span class="fu">plotLinks</span><span class="op">(</span><span class="va">dnart_project</span>, keep <span class="op">=</span> <span class="fl">0.25</span>, n.edges <span class="op">=</span> <span class="fl">5</span>, orientation <span class="op">=</span> <span class="st">'landscape'</span>, file <span class="op">=</span> <span class="st">'landscape2.pdf'</span><span class="op">)</span></code></pre></div>
+<span class="va">proj</span> <span class="op">&lt;-</span> <span class="fu">plotLines</span><span class="op">(</span><span class="va">dnart_project</span>, keep <span class="op">=</span> <span class="fl">0.25</span>, n.edges <span class="op">=</span> <span class="fl">5</span>, orientation <span class="op">=</span> <span class="st">'landscape'</span>, file <span class="op">=</span> <span class="st">'landscape2.pdf'</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 </div>
