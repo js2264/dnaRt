@@ -120,7 +120,6 @@ getPaletteFromImg <- function(img, ncols = 5) {
     return(cols[1:ncols])
 }
 
-
 filterBy <- function(project, label = 'dist_shape') {
     data <- project$plot_data
     top <- project$top
@@ -130,3 +129,28 @@ filterBy <- function(project, label = 'dist_shape') {
     return(project)
 }
 
+turnDataIntoSegms <- function(dat, n = NULL) {
+    nodes <- dat
+    edges <- data.frame(
+        from = rep(1:nrow(dat), each = nrow(dat)), 
+        to = rep(1:nrow(dat), nrow(dat))
+    ) %>% dplyr::filter(from != to)
+    d <- lapply(1:nrow(edges), function(K) {
+        from <- edges[K, 'from']
+        to <- edges[K, 'to']
+        data.frame(
+            x = nodes[from, 'x'], 
+            xend = nodes[to, 'x'],
+            y = nodes[from, 'y'],
+            yend = nodes[to, 'y']
+        )
+    }) %>% do.call(rbind, .)
+    if (!is.null(n)) {
+        d <- d %>% 
+            dplyr::mutate(dist = sqrt((xend - x)^2 + (yend - y)^2)) %>%
+            dplyr::group_by(x, y) %>% 
+            dplyr::arrange(dist) %>% 
+            dplyr::slice_min(dist, n = n)
+    }
+    return(d)
+}

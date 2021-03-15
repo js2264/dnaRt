@@ -1,19 +1,4 @@
-#' plotArt
-#'
-#' @param project 
-#' @param date 
-#' @param age 
-#' @param pdf 
-#' @param path 
-#' @param zoom 
-#' @param max.radius
-#' @param theme.args 
-#'
-#' @return project (invisible)
-#'
-#' @export
-
-plotArt <- function(
+plotXXX <- function(
     project, 
     date = NULL, 
     age = NULL,  
@@ -25,7 +10,7 @@ plotArt <- function(
     background = FALSE,
     maxsize = 49,
     dpi = 300, 
-    max.radius = 0.0075,
+    max.radius = 0.02,
     theme.args = NULL, 
     seed = NULL, 
     ...
@@ -90,7 +75,7 @@ plotArt <- function(
     } 
     # ------- Stop if queried age is higher than max computed age
     if (limit > top) {
-        msg_warning("Age is higher than the maximum computed age. Retry with lower age.")
+        msg_warning(glue::glue("Queried age ({limit}) is higher than the maximum computed age ({top}). Retry with lower age."))
         stop()
     }
     # ------- Import plot df 
@@ -133,35 +118,8 @@ plotArt <- function(
         baseplot <- ggplot(df)
     }
     p <- baseplot
-
+    
     # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< HERE START CUSTOMIZATION
-    # ------- Add black inner circles 
-    if (!'ScaleDiscrete' %in% class(palette)) {
-        blacks <- scale_fill_gradient(low = 'white', high = '#000000')
-        p <- p + 
-            ggforce::geom_voronoi_tile(
-                data = df, aes(x = x_final, y = y_final, fill = fill, group = -1L), 
-                alpha = 0.6,
-                expand = unit(-.55, 'mm'), 
-                radius = unit(0.25, 'mm'), 
-                max.radius = max.radius, 
-                normalize = TRUE, 
-                asp.ratio = 1/ratio
-            ) + blacks + ggnewscale::new_scale_fill()
-    }
-    # ------- Add colored circles
-    p <- p + 
-        ggforce::geom_voronoi_tile(
-            data = df, aes(x = x_final, y = y_final, fill = colored_tile, alpha = colored_tile_alpha, group = -1L), 
-            expand = unit(-.35, 'mm'), 
-            radius = unit(0.25, 'mm'), 
-            max.radius = max.radius*1.25, 
-            normalize = TRUE, 
-            asp.ratio = 1/ratio
-        ) + palette 
-    if ('ScaleDiscrete' %in% class(palette)) {
-        p <- p + scale_alpha(range = c(0.99, 1))
-    }
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> HERE ENDS CUSTOMIZATION
 
     # ------- Add theme arguments
@@ -193,56 +151,3 @@ plotArt <- function(
     invisible(project)
 }
 
-######################################################################
-######################################################################
-######################################################################
-
-plotAges <- function(
-    project, 
-    ages, 
-    ...
-) {
-    for (age in ages) {
-        plotArt(
-            project, 
-            date = NULL, 
-            age = age,  
-            ...
-        )
-    }
-}
-
-backgroundTiles <- function(density = 1000, radius = 0.001, fill = '#949494', col = '#bdbdbdc9') {
-    set.seed(1)
-    df <- data.frame(
-        x = sample(seq(-1, 2, length.out = 10000), density, replace = TRUE),
-        y = sample(seq(-1, 2, length.out = 10000), density, replace = TRUE), 
-        fill = sample(seq(0, 0.3, length.out = 10000), density, replace = TRUE)
-    )
-    p <- ggplot(df, aes(x, y, fill = fill)) + 
-        ggforce::geom_delaunay_tile(
-            radius = radius, 
-            col = col
-        ) + 
-        ggplot2::scale_fill_brewer(palette = 'Greys') + 
-        theme_void() +
-        theme(legend.position = 'none') + 
-        coord_cartesian(xlim = c(-0.05, 1.05), ylim = c(-0.05, 1.05), expand = TRUE, clip = "off") 
-}
-
-zoomify <- function(p, zoom = 1, ratio = 1, seed) {
-    zooms <- c(0, 0.25, 0.33, 0.5, 0.6, 0.66, 0.71, 0.75, 0.77, 0.80)/2
-    set.seed(seed)
-    xlims <- c(
-        zooms[zoom],
-        1 - zooms[zoom]
-    ) + sample(seq(0, 0.97, by = 0.01), 1) * ((1-zoom)/10)/2
-    ylims <- range(c(
-        (zooms[zoom]) * ratio,
-        (1 - zooms[zoom]) * ratio
-    ) + sample(seq(0, 0.97, by = 0.01), 1) * ((1-zoom)/(10))/2)
-    q <- p + coord_cartesian(
-        xlim = xlims, ylim = ylims, expand = TRUE, clip = "off"
-    )
-    return(q)
-}

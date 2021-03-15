@@ -100,3 +100,39 @@ distanceToPoints <- function(data, points) {
     d <- sapply(1:nrow(data), function(K) sf::st_distance(sf_points[K], nearest_el[K]))
     return(d)
 }
+
+getDistanceToCenter <- function(data, keep = 0.05) {
+    # -- Calculate distance to ring
+    x0 <- data$x[which.min(abs(data$x - mean(data$x)))]
+    y0 <- data$y[which.min(abs(data$y - mean(data$y)))]
+    dists <- sapply(1:nrow(data), function(K) {sqrt((data$x[K] - x0)^2 + (data$y[K] - y0)^2)})
+    data$dist <- dists
+    # ------- Bin by angle
+    data$angle <- apply(data, 1, function(row) {
+        an <- atan((row['x'] - x0) / (row['y'] - y0))
+        if (row['x'] > x0 & row['y'] > y0) {
+            an <- pi/2 - an
+        }
+        else if (row['x'] <= x0 & row['y'] > y0) {
+            an <- pi/2 - an
+        }
+        else if (row['x'] <= x0 & row['y'] <= y0) {
+            an <- 3*pi/2 - an
+        }
+        else if (row['x'] > x0 & row['y'] <= y0) {
+            an <- 3*pi/2 - an
+        }
+        return(an)
+    })
+    data$binned_angle <- cut(data$angle, breaks = nrow(data)*keep)
+    # ------- Find optimal max distance
+    data$keep <- sapply(1:nrow(data), function(K) {
+        row <- data[K,]
+        sub <- dplyr::filter(data, binned_angle == row$binned_angle)
+        sub <- sub[which.max(sub$dist),]
+        return(row$x == sub$x & row$y == sub$y)
+    })
+    # ------- Return results
+    return(data[, c('dist', 'angle', 'keep')])
+}
+

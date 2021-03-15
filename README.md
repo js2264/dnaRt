@@ -264,3 +264,22 @@ img <- binImg(img)
 p <- voronoiTiles(img, density = 15000)
 ggsave('landscape.pdf', width = size[2], height = size[1])
 ```
+
+## In progress
+
+### Dot-art
+
+```r
+data(sample_data, package = 'dnaRt')
+dnart_project <- dnart(given = 'Jacques', dob = '20/06/1992', data = sample_data)
+plotDots(dnart_project)
+```
+
+### Link-art
+
+```r
+data(sample_data, package = 'dnaRt')
+dnart_project <- dnart(given = 'Jacques', dob = '20/06/1992', data = sample_data)
+proj <- plotLinks(dnart_project, keep = 0.25, n.edges = 5, orientation = 'landscape', file = 'landscape2.pdf')
+```
+
