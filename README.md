@@ -31,7 +31,6 @@ dnart_project <- dnart(
 )
 # ------- Make default, full art
 plotArt(dnart_project)
-plotArt_2(dnart_project)
 ```
 
 ### Plot with shapes
@@ -280,6 +279,5 @@ plotDots(dnart_project)
 ```r
 data(sample_data, package = 'dnaRt')
 dnart_project <- dnart(given = 'Jacques', dob = '20/06/1992', data = sample_data)
-proj <- plotLinks(dnart_project, keep = 0.25, n.edges = 5, orientation = 'landscape', file = 'landscape2.pdf')
+proj <- plotLines(dnart_project, keep = 0.25, n.edges = 5, orientation = 'landscape', file = 'landscape2.pdf')
 ```
-

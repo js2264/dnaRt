@@ -6,7 +6,7 @@
 #' @param pdf 
 #' @param path 
 #' @param zoom 
-#' @param max.radius
+#' @param max.radius 
 #' @param theme.args 
 #'
 #' @return project (invisible)

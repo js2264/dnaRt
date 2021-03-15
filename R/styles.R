@@ -1,6 +1,15 @@
+#' plotDots
+#'
+#' @export
+
 plotDots <- plotArt
 
 # The idea with plotLines is to plot outer dots and all lines between them
+
+#' plotLinks
+#'
+#' @export
+
 
 plotLinks <- function(
     project, 
